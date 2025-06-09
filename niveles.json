@@ -1,0 +1,70 @@
+{
+  "niveles": {
+    "facil": {
+      "palabras": [
+        "PESO",
+        "ASNO",
+        "ECHA",
+        "CAMA",
+        "ALTO",
+        "BEBÉ",
+        "ARCO",
+        "CAJA"
+      ],
+      "pistas": [
+        "Cantidad que marca la balanza o lo que llevás cargado",
+        "Mamífero doméstico, pariente del caballo, famoso por su terquedad",
+        "Forma del verbo “echar” en tercera persona",
+        "Mueble donde se duerme o descansa",
+        "Que tiene gran altura o intensidad",
+        "Niño muy pequeño",
+        "Instrumento para disparar flechas",
+        "Recipiente con tapa para guardar o transportar objetos"
+      ]
+    },
+    "intermedio": {
+      "palabras": [
+        "ASAMBLEA",
+        "HERENCIA",
+        "ACRÓBATA",
+        "ORÍGENES",
+        "DETALLES",
+        "ATLÉTICO",
+        "COLEGIOS",
+        "ESQUEMAS"
+      ],
+      "pistas": [
+        "Reunión de personas con un mismo interés o propósito",
+        "Lo que recibís de un familiar tras su fallecimiento",
+        "Artista que realiza piruetas y equilibrios en el aire o en el suelo",
+        "Punto o circunstancias de comienzo de algo (plural)",
+        "Elementos pequeños o concretos que completan una descripción",
+        "Relativo al deporte o a quien practica actividades físicas intensas",
+        "Instituciones educativas donde se enseña primaria o secundaria",
+        "Representaciones gráficas o mentales que organizan ideas"
+      ]
+    },
+    "dificil": {
+      "palabras": [
+        "AMABILIDAD",
+        "CARACTERES",
+        "PROGRAMADO",
+        "BICICLETAS",
+        "APRECIABLE",
+        "COLABORADO",
+        "ESPECTADOR",
+        "PALPITANDO"
+      ],
+      "pistas": [
+        "Cualidad de ser atento y agradable con los demás",
+        "Símbolos o letras que componen un texto",
+        "Algo planificado de antemano o escrito en código para ejecutarse",
+        "Vehículos de dos ruedas que se impulsan con pedales",
+        "Que puede percibirse o valorarse claramente",
+        "Participado o ayudado junto con otros en una tarea",
+        "Persona que asiste a un espectáculo o evento para mirar",
+        "Participio de “palpitar”"
+      ]
+    }
+  }
+}
