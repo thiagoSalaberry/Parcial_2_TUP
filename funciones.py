@@ -1,27 +1,39 @@
 import os
 import sys
 import json
+from constantes import *
+from utils import negrita
 
 def jugar():
-    mostrar_juego("facil")
+    niveles = ["facil", "intermedio", "dificil"]
+    nivel_actual = 0
+    puntos = 0
+
+    while nivel_actual < len(niveles):
+        nivel_actual, puntos = jugar_nivel(i_nivel=nivel_actual, nivel=niveles[nivel_actual], puntos=puntos)
+
+    print("¡🎉 Felicitaciones, ganaste el juego!")
+
+    en_mejores_10 = cargar_estadisticas(puntos=puntos)
+    if en_mejores_10:
+        print("🎖️ Ingresaste al ranking de los mejores 10")
 
 def mostrar_juego(nivel: str, completadas: list[int], puntos: int = 0) -> None:
     datos_nivel = cargar_nivel(nivel)
     palabras = datos_nivel["palabras"]
     
-    print("-" * 20)
-    print(" " * 5 + "CODY CROSS" + " " * 5)
-    print("-" * 20)
-    print(f"Puntos: {puntos}")
-    print("-" * 20)
+    print(f"""{"-" * 20}
+{" " * 5 + "CODY CROSS" + " " * 5}
+{"-" * 20}
+Puntos: {puntos}
+{"-" * 20}
+""")
     for i, palabra in enumerate(palabras):
         linea = f"{i + 1}. {palabra}" if i in completadas else f"{i + 1}. {"-" * len(palabra)}"
         print(linea)
 
-def cargar_nivel(nivel: str) -> dict:
-    ruta_niveles = "."
-    nombre_niveles = "niveles.json"
-    with open(os.path.join(ruta_niveles, nombre_niveles), "r", encoding="utf-8") as archivo_niveles:
+def cargar_nivel(nivel: str, arch_niveles: str = ARCH_NIVELES) -> dict:
+    with open(arch_niveles, "r", encoding="utf-8") as archivo_niveles:
         datos_niveles = json.load(archivo_niveles)
         datos_nivel = datos_niveles["niveles"][nivel]
     
@@ -58,12 +70,12 @@ def jugar_nivel(i_nivel: int, nivel: str, puntos: int = 0) -> int:
             break
         
         if palabra.strip().upper() == palabras[i_palabra - 1]:
-            os.system("cls")
+            limpiar_terminal()
             print("¡✅ La palabra es correcta!")
             puntos += 10
             completadas.append(i_palabra - 1)
         else:
-            os.system("cls")
+            limpiar_terminal()
             puntos -= 5
             print("❌ Esa no es la palabra, intentá de nuevo")
     
@@ -72,34 +84,80 @@ def jugar_nivel(i_nivel: int, nivel: str, puntos: int = 0) -> int:
     return i_nivel + 1, puntos
 
 def creditos():
-    msj_creditos = """Créditos
+    """
+    Muestra un mensaje de créditos
+    """
+    print(MENSAJE_DE_CREDITOS)
 
-***DESCRIPCIÓN***
-Autores: Bautista Ruiz y Thiago Salaberry
-Fecha de desarrollo: Junio a Julio de 2025
-Detalles de la materia: Programación I
-Docente: Prof. Martín Alejandro García y Verónica Natalia Carbonari
-Carrera: Tecnicatura Universitaria en Programación - UTN Avellaneda
-Mails de contacto: bautyruiz1011@gmail.com y thiagosalaberry99@gmail.com
-"""
-    print(msj_creditos)
-
-def cargar_estadisticas(puntos: int) -> None:
+def cargar_estadisticas(puntos: int, arch_estad: str = ARCH_ESTAD) -> None:
     """
     Carga el nombre y los puntos del jugador en un archivo .txt
     """
-    nombre_completo = input("Ingresá tu nombre completo: ")
-    print(f"{nombre_completo}: {puntos}")
-    estadisticas = leer_estadisticas()
+    nombre_completo = input("Ingresá tu nombre completo: ")[:12].strip()
 
-    pass
+    estadisticas: list[str] = leer_estadisticas()
 
-def leer_estadisticas():
-    """
-    Lee un archivo .txt
-    """
-    pass
+    estadisticas.append(f"{nombre_completo} - {puntos}")
+    estadisticas.sort(key=lambda x: int(x.split(" - ")[1]), reverse=True)
+
+    with open(arch_estad, "w") as file:
+        file.writelines([f"{linea}\n" for linea in estadisticas][:10])
+    
+
+
+def leer_estadisticas(arch_estad: str = ARCH_ESTAD) -> list[str]:
+    with open(arch_estad, "r") as file:
+        lineas = file.readlines()
+
+    estadisticas = [linea.replace("\n", "") for linea in lineas]
+    
+    # titulo = "🏅 Mejores 10 Jugadores 🏅"
+    # print("-" * (len(titulo) + 12) + "\n" + " " * 5 + titulo + " " * 5 + "\n" + "-" * (len(titulo) + 12))
+    print(MENSAJE_DE_ESTADISTICAS)
+    for i, jugador in enumerate(estadisticas):
+        nombre, puntos = jugador.split(" - ")
+        if i == 0:
+            print(f"🥇 - {nombre}: {puntos}")
+        elif i == 1:
+            print(f"🥈 - {nombre}: {puntos}")
+        elif i == 2:
+            print(f"🥉 - {nombre}: {puntos}")
+        else:
+            print(f" {i + 1} - {nombre}: {puntos}")
+
+    return estadisticas
 
 def salir():
-    print("👋 Hasta la próxima!")
+    """
+    Termina el programa de forma armoniosa
+    """
+    print(MENSAJE_DE_SALIDA)
     sys.exit(0)
+
+def menu(error: bool = False) -> int:
+    """
+    Muestra el menú en la terminal y devuelve la opción elegida por el usuario
+    """
+    limpiar_terminal()
+    print(MENU)
+
+    if error:
+        print("❌ Error: ingresá un número del 1 al 4.")
+
+    eleccion = input("Ingresá la opción correspondiente y apretá Enter: ")
+    if not eleccion.isdigit():
+        return menu(error=True)
+
+    eleccion = int(eleccion)
+    if eleccion not in range(1, 5):
+        return menu(error=True)
+    
+    limpiar_terminal()
+    return eleccion
+
+def limpiar_terminal() -> None:
+    """
+    Limpia la terminal tanto para sistemas operativos Windows como para sistemas operativos macOS y Linux
+    """
+    os.system("cls" if os.name == "nt" else "clear")
+        
