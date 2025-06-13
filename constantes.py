@@ -1,4 +1,5 @@
 import os
+import pygame
 from utils import negrita
 
 RUTA_DATA = "data"
@@ -42,3 +43,7 @@ Emails de contacto:
 
 
 MENSAJE_DE_SALIDA = f"¡Gracias por jugar a {negrita("CODY CROSS")}!\n¡Hasta la próxima! 👋"
+
+
+# font = pygame.font.Font("assets/font.ttf", 24)
+color = (203, 219,  208)
