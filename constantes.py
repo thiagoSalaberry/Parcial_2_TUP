@@ -8,6 +8,8 @@ ARCH_ESTAD = os.path.join(RUTA_DATA, "estadisticas.txt")
 
 margen = 10
 
+font = pygame.font.Font("assets/font.ttf", 24)
+
 def sum(largo: int) -> int:
     return len(largo) + margen * 2 + 1 if (len(largo) + margen * 2) % 2 == 0 else len(largo) + margen * 2
 
