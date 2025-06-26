@@ -5,6 +5,13 @@ from constantes import COLOR_TEXTO
 from componentes.input import crear_input, render_input, manejar_click_input
 from estado import estado, set_estado, get_estado
 
+
+def ir_a_palabra(i: int) -> None:
+    acertadas = get_estado("acertadas")
+    if not acertadas[i]:
+        set_estado({ "i_palabra_actual": i })
+
+
 def rn_palabra(
     area: Surface,
     eventos: list[pygame.event.Event],
@@ -36,7 +43,7 @@ def rn_palabra(
             char = palabra[j]
         else:
             char = ""
-        letra = crear_input(x + (x + j * 70), y, char, i == i_palabra_actual, estado_palabra, lambda: set_estado({ "i_palabra_actual": i }), font)
+        letra = crear_input(x + (x + j * 70), y, char, i == i_palabra_actual, estado_palabra, lambda: ir_a_palabra(i), font)
         letras.append(letra)
 
     for letra in letras:
