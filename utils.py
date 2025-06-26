@@ -8,3 +8,5 @@ def cambiar_pantalla(pantalla: str) -> None:
         raise ValueError("'pantalla' debe ser 'inicio', 'jugar', 'estadisticas' o 'creditos'.")
 
     set_estado("pantalla", pantalla)
+
+# def leer_niveles()

@@ -3,7 +3,7 @@ from pygame.font import Font
 from pygame import Surface
 from constantes import COLOR_TEXTO
 from componentes.input import crear_input, render_input, manejar_click_input
-from estado import estado
+from estado import estado, set_estado
 
 
 def mostrar_palabra(
@@ -21,6 +21,7 @@ def mostrar_palabra(
         font = pygame.font.SysFont(None, 24)
 
     palabras_completadas = estado["palabras_completadas"]
+    score = estado["score"]
     palabra = palabras_completadas[i_palabra]
 
     bien = palabra == palabra_correcta
