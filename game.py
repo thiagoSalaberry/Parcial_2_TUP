@@ -1,8 +1,9 @@
 import pygame
+import os
 import sys
 from pygame import Surface
 from pygame.font import Font
-from estado import estado, set_estado, subscribe
+from estado import estado, get_estado, set_estado, subscribe
 from pantallas_modelo import pant_creditos, pant_estadisticas, pant_inicio, pant_jugar
 from render import render_pantalla
 from componentes.palabra import mostrar_palabra
@@ -162,4 +163,112 @@ def play():
         pygame.display.flip()
         clock.tick(60)
 
-play()
+# play()
+
+def main() -> None:
+    os.system("cls")
+    pygame.init()
+
+    ancho = 800
+    alto = 600
+    color = (203, 219,  208)
+
+    screen = pygame.display.set_mode((ancho, alto))
+
+    pygame.display.set_caption("CODY CROSS")
+    clock = pygame.time.Clock()
+    ejecutando = True
+
+    font = pygame.font.Font("assets/font.ttf", 24)
+    fondo = pygame.image.load("assets/fondo.png").convert()
+    fondo = pygame.transform.scale(fondo, screen.get_size())
+
+    estado = get_estado()
+    data_niveles = leer_niveles()
+    set_estado({
+            "pantalla": "inicio",
+            "nivel_actual": "facil",
+            "palabras": data_niveles["facil"]["palabras"],
+            "palabras_validadas": [False] * 8,
+            "palabras_completadas": ["", "", "", "", "", "", "", ""],
+            "pistas": data_niveles["facil"]["pistas"]
+        })
+    print(json.dumps(estado, indent=4))
+
+    palabra = ""
+    def print_palabra():
+        os.system("cls")
+        estado = get_estado()
+        print(json.dumps(estado, indent=4))
+
+    subscribe(print_palabra)
+
+    def crear_letra(x: int, y: int, letra: str, activo: bool, estado: str, callback: callable, font: Font = None) -> dict:
+        if not font:
+            font = pygame.font.SysFont(None, 24)
+        
+        area_texto = font.render(letra, True, (255, 255, 255))        
+        ancho, alto = 50, 50
+
+        rect = pygame.Rect(x, y, ancho, alto)
+
+        return {
+            "letra": letra,
+            "rect": rect,
+            "activo": activo,
+            "estado": estado,
+            "callback": callback,
+            "area_texto": area_texto,
+        }
+
+    def rn_letra(area: Surface, letra: dict) -> None:
+        rect: pygame.Rect = letra["rect"]
+
+        fondo = (40, 40, 40)
+
+        pygame.draw.rect(area, fondo, rect)
+        area.blit(
+            letra["area_texto"],
+            (
+                rect.centerx - letra["area_texto"].get_width() // 2,
+                rect.centery - letra["area_texto"].get_height() // 2,
+            )
+        )
+
+    
+    
+    while ejecutando:
+        # 👇 Acá manejamos los eventos de teclado y mouse
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(0)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_TAB:
+                    set_estado({
+                        "palabra_actual": palabra
+                    })
+                elif event.key == pygame.K_BACKSPACE:
+                    palabra = palabra[:-1]
+                else:
+                    code = event.unicode
+                    if code in ["i", "j", "e", "c"]:
+                        set_estado({ "pantalla": code })
+
+        # Acá extraemos el valor de la pantalla que determinará qué pantalla vamos a renderizar
+        pantalla = get_estado("pantalla")    
+        if pantalla == "i":
+            print("🏠 Inicio")
+        elif pantalla == "j":
+            print("🕹️ A Jugar")
+        elif pantalla == "e":
+            print("📊 Estadísticas")
+        elif pantalla == "c":
+            print("👨👨 Créditos")
+
+
+        pygame.display.flip()
+        clock.tick(60)
+
+main()
