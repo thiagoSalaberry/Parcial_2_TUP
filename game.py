@@ -9,6 +9,7 @@ from render import render_pantalla
 from componentes.palabra import rn_palabra
 from componentes.texto import render_texto
 from constantes import ARCH_NIVELES
+from eventos import on, trigger
 import json
 
 def cambiar_pantalla(pantalla: str) -> None:
@@ -184,45 +185,57 @@ def main() -> None:
     fondo = pygame.image.load("assets/fondo.png").convert()
     fondo = pygame.transform.scale(fondo, screen.get_size())
 
-    estado = get_estado()
     data_niveles = leer_niveles()
     set_estado({
-            "pantalla": "test",
-            "nivel_actual": "facil",
-            "palabras": data_niveles["facil"]["palabras"],
-            "palabras_validadas": [False] * 8,
-            "palabras_completadas": ["", "", "", "", "", "", "", ""],
-            "pistas": data_niveles["facil"]["pistas"]
-        })
+        "pantalla": "test",
+        "nivel_actual": "facil",
+        "palabras": data_niveles["facil"]["palabras"],
+        "palabras_validadas": [False] * 8,
+        "palabras_completadas": ["", "", "", "", "", "", "", ""],
+        "acertadas": [False] * 8,
+        "pistas": data_niveles["facil"]["pistas"]
+    })
+
+    estado = get_estado()
     print(json.dumps(estado, indent=4))
-
-
+    
     def print_palabra():
         os.system("cls")
-        estado = get_estado("palabra_actual")
-        score = get_estado("score")
+        estado = get_estado()
         print(json.dumps(estado, indent=4))
-        print(json.dumps(score, indent=4))
-    from eventos import on, trigger
+    
     def handle_points() -> None:
         i_palabra_actual = get_estado("i_palabra_actual")
         palabra_correcta = get_estado("palabras")[i_palabra_actual]
         palabra_actual = get_estado("palabra_actual")
+        acertadas = get_estado("acertadas")
         score = get_estado("score")
         if len(palabra_actual) == 4:
             if palabra_actual == palabra_correcta:
-                print(f"✅ La palabra es correcta, +10 puntos")
-                set_estado({ "score": score + 10 })
+                acertadas[i_palabra_actual] = True
+                set_estado({ "score": score + 10, "acertadas": acertadas })
+                siguiente(i_palabra_actual)
             else:
-                print(f"❌ La palabra es incorrecta, -5 puntos")
                 set_estado({ "score": score - 5 })
 
     on("palabra_completada", handle_points)
-    def verify_word():
-        if len(get_estado("palabra_actual")) == 4:
+    def verificar_palabra():
+        palabra_actual = get_estado("palabra_actual")
+        if len(palabra_actual) == 4:
             trigger("palabra_completada")
 
-    subscribe(print_palabra)
+    def handle_win():
+        print("Ganaste el nivel!")
+    def nivel_terminado():
+        acertadas = get_estado("acertadas")
+        ganado = True
+        for acertada in acertadas:
+            if not acertada:
+                ganado = False
+        if ganado:
+            trigger("nivel_ganado")
+    on("nivel_ganado", handle_win)
+    # subscribe(print_palabra)
     def ingresar_letra(letra: str) -> None:
         i_palabra_actual = get_estado("i_palabra_actual")
         palabras_completadas = get_estado("palabras_completadas")
@@ -234,7 +247,9 @@ def main() -> None:
                 "palabras_completadas": palabras_completadas,
                 "palabra_actual": palabra_actual
             })
-            verify_word()
+            verificar_palabra()
+            nivel_terminado()
+
     def borrar_letra() -> None:
         i_palabra_actual = get_estado("i_palabra_actual")
         palabras_completadas = get_estado("palabras_completadas")
@@ -244,6 +259,30 @@ def main() -> None:
             "palabras_completadas": palabras_completadas,
             "palabra_actual": palabra_actual,
         })
+
+    def siguiente(i_palabra_actual: int):
+        acertadas = get_estado("acertadas")
+        total = len(acertadas)
+
+        # Buscar hacia adelante
+        for i in range(i_palabra_actual + 1, total):
+            if not acertadas[i]:
+                set_estado({ "i_palabra_actual": i })
+                return i
+
+        # Buscar desde el principio hasta la actual
+        for i in range(0, i_palabra_actual):
+            if not acertadas[i]:
+                set_estado({ "i_palabra_actual": i })
+                return i
+
+        # Todas acertadas
+        return None
+
+    def print_score():
+        score = get_estado("score")
+        print(f"Score: {score}")
+    subscribe(print_score)
     palabras = get_estado("palabras")
     while ejecutando:
         # 👇 Acá manejamos los eventos de teclado y mouse
@@ -255,8 +294,7 @@ def main() -> None:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_TAB:
                     i_palabra_actual = get_estado("i_palabra_actual")
-                    nuevo_i = i_palabra_actual + 1 if i_palabra_actual < 7 else 0
-                    set_estado({ "i_palabra_actual": nuevo_i })
+                    siguiente(i_palabra_actual)
                 elif event.key == pygame.K_BACKSPACE:
                     borrar_letra()
                 else:

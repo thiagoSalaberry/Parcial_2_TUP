@@ -7,6 +7,7 @@ estado = {
         "palabra_actual": "",
         "palabras_completadas": [],
         "palabras": [],
+        "acertadas": [],
         "palabras_validadas": [],
         "pistas": [],
     },
@@ -38,7 +39,6 @@ def set_estado(nuevos_valores: dict) -> None:
     if cambios:
         for listener in estado["listeners"]:
             listener()
-        print("El estado se actualizó con éxito.")
 
 
 def subscribe(callback: callable) -> None:
