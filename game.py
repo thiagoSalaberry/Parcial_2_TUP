@@ -4,9 +4,9 @@ import sys
 from pygame import Surface
 from pygame.font import Font
 from estado import estado, get_estado, set_estado, subscribe
-from pantallas_modelo import pant_creditos, pant_estadisticas, pant_inicio, pant_jugar
+from pantallas import pant_creditos, pant_estadisticas, pant_inicio, pant_jugar
 from render import render_pantalla
-from componentes.palabra import mostrar_palabra
+from componentes.palabra import rn_palabra
 from componentes.texto import render_texto
 from constantes import ARCH_NIVELES
 import json
@@ -138,20 +138,21 @@ def play():
         # De acá para abajo 👇
         if pantalla == "inicio":
             for i in range(len(palabras)):
-                mostrar_palabra(
-                    screen,
-                    200,
-                    i + i * 70,
-                    i,
-                    estado["i_palabra_actual"] == i,
-                    lambda: set_estado("i_palabra_actual", i),
-                    events,
-                    palabras[i]
-                )
-            texto_pista = { "tipo": "texto",  "valor": pistas[i_palabra_actual], "pos": (400, 500) }
-            texto_score = { "tipo": "texto",  "valor": str(score), "pos": (50, 50) }
-            render_texto(screen, texto_pista)
-            render_texto(screen, texto_score)
+            #     mostrar_palabra(
+            #         screen,
+            #         200,
+            #         i + i * 70,
+            #         i,
+            #         estado["i_palabra_actual"] == i,
+            #         lambda: set_estado("i_palabra_actual", i),
+            #         events,
+            #         palabras[i]
+            #     )
+            # texto_pista = { "tipo": "texto",  "valor": pistas[i_palabra_actual], "pos": (400, 500) }
+            # texto_score = { "tipo": "texto",  "valor": str(score), "pos": (50, 50) }
+            # render_texto(screen, texto_pista)
+            # render_texto(screen, texto_score)
+                continue
             
         elif pantalla == "jugar":
             render_pantalla(screen, pant_jugar, events, volver=True, font=font)
@@ -186,7 +187,7 @@ def main() -> None:
     estado = get_estado()
     data_niveles = leer_niveles()
     set_estado({
-            "pantalla": "inicio",
+            "pantalla": "test",
             "nivel_actual": "facil",
             "palabras": data_niveles["facil"]["palabras"],
             "palabras_validadas": [False] * 8,
@@ -195,48 +196,34 @@ def main() -> None:
         })
     print(json.dumps(estado, indent=4))
 
-    palabra = ""
+
     def print_palabra():
         os.system("cls")
-        estado = get_estado()
+        estado = get_estado("i_palabra_actual")
         print(json.dumps(estado, indent=4))
 
     subscribe(print_palabra)
-
-    def crear_letra(x: int, y: int, letra: str, activo: bool, estado: str, callback: callable, font: Font = None) -> dict:
-        if not font:
-            font = pygame.font.SysFont(None, 24)
-        
-        area_texto = font.render(letra, True, (255, 255, 255))        
-        ancho, alto = 50, 50
-
-        rect = pygame.Rect(x, y, ancho, alto)
-
-        return {
-            "letra": letra,
-            "rect": rect,
-            "activo": activo,
-            "estado": estado,
-            "callback": callback,
-            "area_texto": area_texto,
-        }
-
-    def rn_letra(area: Surface, letra: dict) -> None:
-        rect: pygame.Rect = letra["rect"]
-
-        fondo = (40, 40, 40)
-
-        pygame.draw.rect(area, fondo, rect)
-        area.blit(
-            letra["area_texto"],
-            (
-                rect.centerx - letra["area_texto"].get_width() // 2,
-                rect.centery - letra["area_texto"].get_height() // 2,
-            )
-        )
-
-    
-    
+    def ingresar_letra(letra: str) -> None:
+        i_palabra_actual = get_estado("i_palabra_actual")
+        palabras_completadas = get_estado("palabras_completadas")
+        palabra_actual = palabras_completadas[i_palabra_actual]
+        if len(palabra_actual) < 4:
+            palabra_actual += letra
+            palabras_completadas[i_palabra_actual] = palabra_actual
+            set_estado({
+                "palabras_completadas": palabras_completadas,
+                "palabra_actual": palabra_actual
+            })
+    def borrar_letra() -> None:
+        i_palabra_actual = get_estado("i_palabra_actual")
+        palabras_completadas = get_estado("palabras_completadas")
+        palabra_actual = get_estado("palabras_completadas")[i_palabra_actual][:-1]
+        palabras_completadas[i_palabra_actual] = palabra_actual
+        set_estado({
+            "palabras_completadas": palabras_completadas,
+            "palabra_actual": palabra_actual,
+        })
+    palabras = get_estado("palabras")
     while ejecutando:
         # 👇 Acá manejamos los eventos de teclado y mouse
         events = pygame.event.get()
@@ -246,26 +233,41 @@ def main() -> None:
                 sys.exit(0)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_TAB:
-                    set_estado({
-                        "palabra_actual": palabra
-                    })
+                    i_palabra_actual = get_estado("i_palabra_actual")
+                    nuevo_i = i_palabra_actual + 1 if i_palabra_actual < 7 else 0
+                    set_estado({ "i_palabra_actual": nuevo_i })
                 elif event.key == pygame.K_BACKSPACE:
-                    palabra = palabra[:-1]
+                    borrar_letra()
                 else:
                     code = event.unicode
-                    if code in ["i", "j", "e", "c"]:
-                        set_estado({ "pantalla": code })
+                    if code in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+                        set_estado({ "i_palabra_actual": int(code) - 1 })
+                    else:
+                        ingresar_letra(code.upper())
+                    
+        screen.fill((20, 20, 20))
 
         # Acá extraemos el valor de la pantalla que determinará qué pantalla vamos a renderizar
         pantalla = get_estado("pantalla")    
-        if pantalla == "i":
-            print("🏠 Inicio")
-        elif pantalla == "j":
-            print("🕹️ A Jugar")
-        elif pantalla == "e":
-            print("📊 Estadísticas")
-        elif pantalla == "c":
-            print("👨👨 Créditos")
+        if pantalla == "inicio":
+            render_pantalla(screen, pant_inicio, events, False, font)
+        elif pantalla == "jugar":
+            render_pantalla(screen, pant_jugar, events, False, font)
+        elif pantalla == "estadisticas":
+            render_pantalla(screen, pant_estadisticas, events, False, font)
+        elif pantalla == "creditos":
+            render_pantalla(screen, pant_creditos, events, False, font)
+        else:
+            for i, palabra in enumerate(palabras):
+                pos = (100, i + i * 70)
+                rn_palabra(
+                    area=screen,
+                    eventos=events,
+                    palabra_correcta=palabra,
+                    i=i,
+                    pos=pos,
+                    font=font
+                )
 
 
         pygame.display.flip()
