@@ -199,8 +199,28 @@ def main() -> None:
 
     def print_palabra():
         os.system("cls")
-        estado = get_estado("i_palabra_actual")
+        estado = get_estado("palabra_actual")
+        score = get_estado("score")
         print(json.dumps(estado, indent=4))
+        print(json.dumps(score, indent=4))
+    from eventos import on, trigger
+    def handle_points() -> None:
+        i_palabra_actual = get_estado("i_palabra_actual")
+        palabra_correcta = get_estado("palabras")[i_palabra_actual]
+        palabra_actual = get_estado("palabra_actual")
+        score = get_estado("score")
+        if len(palabra_actual) == 4:
+            if palabra_actual == palabra_correcta:
+                print(f"✅ La palabra es correcta, +10 puntos")
+                set_estado({ "score": score + 10 })
+            else:
+                print(f"❌ La palabra es incorrecta, -5 puntos")
+                set_estado({ "score": score - 5 })
+
+    on("palabra_completada", handle_points)
+    def verify_word():
+        if len(get_estado("palabra_actual")) == 4:
+            trigger("palabra_completada")
 
     subscribe(print_palabra)
     def ingresar_letra(letra: str) -> None:
@@ -214,6 +234,7 @@ def main() -> None:
                 "palabras_completadas": palabras_completadas,
                 "palabra_actual": palabra_actual
             })
+            verify_word()
     def borrar_letra() -> None:
         i_palabra_actual = get_estado("i_palabra_actual")
         palabras_completadas = get_estado("palabras_completadas")
