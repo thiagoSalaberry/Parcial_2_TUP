@@ -3,7 +3,7 @@ from pygame import Surface
 from pygame.font import Font
 from constantes import COLOR_TEXTO, COLOR_BOTON
 from componentes.boton import crear_boton, render_boton, manejar_click_boton
-from utils import cambiar_pantalla
+from utils.utils import cambiar_pantalla
 from componentes.texto import render_texto
 from componentes.input import crear_input, render_input, manejar_click_input
 

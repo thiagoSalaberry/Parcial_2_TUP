@@ -1,5 +1,5 @@
 import sys
-from utils import cambiar_pantalla
+from utils.utils import cambiar_pantalla
 
 
 pant_inicio = [

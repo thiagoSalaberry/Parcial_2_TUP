@@ -1,6 +1,6 @@
 import os
 import pygame
-from utils import negrita
+from utils.utils import negrita
 
 RUTA_DATA = "data"
 ARCH_NIVELES = os.path.join(RUTA_DATA, "niveles.json")

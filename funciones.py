@@ -2,7 +2,7 @@ import os
 import sys
 import json
 from constantes import *
-from utils import negrita
+from utils.utils import negrita
 
 def jugar():
     niveles = ["facil", "intermedio", "dificil"]

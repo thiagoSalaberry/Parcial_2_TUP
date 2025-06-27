@@ -1,3 +1,4 @@
+Thiago Salab - 235
 Thiago - 110
 Alejandro - 110
 Juan - 110
@@ -7,4 +8,3 @@ Mario - 90
 Franco - 90
 Candelaria - 90
 Nombre - 80
-Thiago - 70
