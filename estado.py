@@ -3,6 +3,7 @@ estado = {
         "pantalla": "",
         "score": 0,
         "nivel_actual": "",
+        "estado_nivel_actual": "",
         "i_palabra_actual": 0,
         "palabra_actual": "",
         "palabras_completadas": [],

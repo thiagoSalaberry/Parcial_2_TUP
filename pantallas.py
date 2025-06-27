@@ -1,6 +1,6 @@
 import sys
-from utils.utils import cambiar_pantalla
-
+from utils.utils_pygame import cambiar_pantalla
+from estado import get_estado
 
 pant_inicio = [
     { "tipo": "boton", "valor": "Jugar",        "pos": (400, 200), "callback": lambda: cambiar_pantalla("jugar") },
@@ -8,7 +8,8 @@ pant_inicio = [
     { "tipo": "boton", "valor": "Créditos",     "pos": (400, 320), "callback": lambda: cambiar_pantalla("creditos") },
     { "tipo": "boton", "valor": "Salir",        "pos": (400, 380), "callback": lambda: sys.exit(0) },
 ]
-
+nivel_actual = get_estado("nivel_actual")
+palabras = get_estado("palabras")
 pant_jugar = [
     { "tipo": "texto",  "valor": "Nivel: 1",                "pos": (400, 80) },
     { "tipo": "texto",  "valor": "Puntos: 0",               "pos": (400, 120) },
