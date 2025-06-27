@@ -41,7 +41,8 @@ def main() -> None:
     correcto = pygame.mixer.Sound("assets/correcto.mp3")
     error = pygame.mixer.Sound("assets/error.mp3")
     ganar = pygame.mixer.Sound("assets/ganar.mp3")
-
+    inicio = pygame.mixer.Sound("assets/inicio.mp3")
+   
    
     ganar.play()
     
@@ -63,7 +64,7 @@ def main() -> None:
 
     data_niveles = leer_niveles()
     set_estado({
-        "pantalla": "creditos",
+        "pantalla": "jugar",
         "nivel_actual": "facil",
         "palabras": data_niveles["facil"]["palabras"],
         "palabras_validadas": [False] * 8,
