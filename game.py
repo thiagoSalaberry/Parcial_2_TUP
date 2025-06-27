@@ -22,6 +22,16 @@ COLOR_BOTON = (50, 50, 50)
 def main() -> None:
     os.system("cls")
     pygame.init()
+    pygame.mixer.init()
+    correcto = pygame.mixer.Sound("assets/correcto.mp3")
+    error = pygame.mixer.Sound("assets/error.mp3")
+    ganar = pygame.mixer.Sound("assets/ganar.mp3")
+    inicio = pygame.mixer.Sound("assets/inicio.mp3")
+   
+   
+    ganar.play()
+    
+    
 
     ancho = 800
     alto = 600
@@ -80,6 +90,7 @@ def main() -> None:
                     # else:
                     #     ingresar_letra(code.upper())
                     
+        screen.blit(fondo, (0, 0))
         screen.blit(fondo, (0, 0))
 
         render_pantalla(screen, pant_inicio, events, False, font)
