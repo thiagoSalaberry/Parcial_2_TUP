@@ -1,5 +1,5 @@
 import pygame
-from constantes import COLOR_TEXTO, COLOR_BOTON
+from constantes import COLOR_TEXTO, COLOR_BOTON, COLOR_BOTON_SOMBRA
 from pygame import Surface
 
 def crear_boton(
@@ -27,10 +27,12 @@ def crear_boton(
     alto = rect_texto.height + padding_y * 2
 
     rect = pygame.Rect(x, y, ancho, alto)
+    sombra_rect = pygame.Rect(x, y + 4, ancho, alto)
 
     return {
         "texto": texto,
         "rect": rect,
+        "sombra_rect": sombra_rect,
         "callback": callback,
         "area_texto": area_texto,
         "font": font
@@ -38,6 +40,8 @@ def crear_boton(
 
 def render_boton(area: Surface, boton: dict) -> None:
     rect: pygame.Rect = boton["rect"]
+    sombra_rect: pygame.Rect = boton["sombra_rect"]
+    pygame.draw.rect(area, COLOR_BOTON_SOMBRA, sombra_rect, border_radius=5)
     pygame.draw.rect(area, COLOR_BOTON, rect, border_radius=5)
     area.blit(
         boton["area_texto"],

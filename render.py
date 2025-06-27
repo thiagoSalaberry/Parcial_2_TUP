@@ -33,21 +33,42 @@ els_pantallas = {
         },
     },
     "estadisticas": [
-        { "tipo": "texto", "valor": "Ranking", "pos": (300, 50) },
-        { "tipo": "boton", "valor": "Volver",        "pos": (400, 200), "callback": lambda: cambiar_pantalla("inicio") }
+        { "tipo": "texto",  "valor": "Ranking", "pos": (400, 45) },
+        { "tipo": "texto",  "valor": "1 - Mateo", "pos": (400, 85) },
+        { "tipo": "texto",  "valor": "2 - Valentina", "pos": (400, 125) },
+        { "tipo": "texto",  "valor": "3 - Thiago", "pos": (400, 165) },
+        { "tipo": "texto",  "valor": "4 - Isabella", "pos": (400, 205) },
+        { "tipo": "texto",  "valor": "5 - Benjamín", "pos": (400, 245) },
+        { "tipo": "texto",  "valor": "6 - Sofía", "pos": (400, 285) },
+        { "tipo": "texto",  "valor": "7 - Santiago", "pos": (400, 325) },
+        { "tipo": "texto",  "valor": "8 - Emma", "pos": (400, 365) },
+        { "tipo": "texto",  "valor": "9 - Joaquín", "pos": (400, 405) },
+        { "tipo": "texto",  "valor": "10 - Olivia", "pos": (400, 445) },
+        { "tipo": "boton",  "valor": "Volver",                  "pos": (690, 550), "callback": lambda: cambiar_pantalla("inicio") },
     ],
     "creditos": [
-        { "tipo": "texto", "valor": "Créditos", "pos": (300, 50) },
-        { "tipo": "boton", "valor": "Volver",        "pos": (400, 200), "callback": lambda: cambiar_pantalla("inicio") }
-
+        { "tipo": "texto",  "valor": "Créditos", "pos": (400, 45) },
+        { "tipo": "texto",  "valor": "Autores:", "pos": (400, 75) },
+        { "tipo": "texto",  "valor": "Bautista Ruiz", "pos": (400, 105) },
+        { "tipo": "texto",  "valor": "Thiago Salaberryz", "pos": (400, 125) },
+        { "tipo": "texto",  "valor": "Fecha de Desarrollo:", "pos": (400, 165) },
+        { "tipo": "texto",  "valor": "Junio 2025", "pos": (400, 195) },
+        { "tipo": "texto",  "valor": "Materia:", "pos": (400, 235) },
+        { "tipo": "texto",  "valor": "Programación I", "pos": (400, 265) },
+        { "tipo": "texto",  "valor": "Docente:", "pos": (400, 305) },
+        { "tipo": "texto",  "valor": "Prof. Martín Alejandro García y Verónica Natalia Carbonari", "pos": (400, 335) },
+        { "tipo": "texto",  "valor": "Carrera:", "pos": (400, 375) },
+        { "tipo": "texto",  "valor": "Tecnicatura Universitaria en Programación - UTN Avellaneda", "pos": (400, 405) },
+        { "tipo": "texto",  "valor": "Emails de contacto:", "pos": (400, 445) },
+        { "tipo": "texto",  "valor": "bautyruiz1011@gmail.com", "pos": (400, 475) },
+        { "tipo": "texto",  "valor": "thiagosalaberry99@gmail.com", "pos": (400, 505) },
+        { "tipo": "boton",  "valor": "Volver",   "pos": (690, 550), "callback": lambda: cambiar_pantalla("inicio") },
     ],
 }
 
 def render_pantalla(
     area: Surface,
-    elementos: list[dict],
     eventos: list[pygame.event.Event],
-    volver: bool = False,
     font: pygame.font.Font = None
 ) -> None:
     pantalla = get_estado("pantalla")
@@ -60,7 +81,7 @@ def render_pantalla(
                 texto(area, el, font)
             elif el["tipo"] == "boton":
                 x, y = el["pos"]
-                boton = crear_boton(x, y, el["valor"], el["callback"])
+                boton = crear_boton(x, y, el["valor"], el["callback"], font=font)
                 botones.append(boton)
             elif el["tipo"] == "input":
                 x, y = el["pos"]
@@ -69,12 +90,6 @@ def render_pantalla(
             elif el["tipo"] == "pantalla":
                 x, y = el["pos"]
                 # crear_palabra(area, x, y, el["valor"], False, lambda: cambiar_pantalla("pantalla", "inicio"), eventos)
-
-
-                
-        if volver:
-            boton_volver = crear_boton(500, 50, "Volver", lambda: cambiar_pantalla("pantalla", "inicio"))
-            botones.append(boton_volver)
 
         estado_nivel_actual = get_estado("estado_nivel_actual")
         if estado_nivel_actual == "ganado":
