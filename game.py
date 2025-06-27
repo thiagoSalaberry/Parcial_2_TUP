@@ -6,7 +6,6 @@ from pygame.font import Font
 from estado import estado, get_estado, set_estado, subscribe
 from pantallas import pant_creditos, pant_estadisticas, pant_inicio, pant_jugar
 from render import *
-from componentes.palabra import rn_palabra
 from componentes.boton import *
 from componentes.texto import texto
 from constantes import ARCH_NIVELES
@@ -60,7 +59,10 @@ def main() -> None:
     })   
 
     on("palabra_completada", handle_points)
-    on("nivel_ganado", lambda: handle_win(get_estado("nivel_actual")))
+    on("nivel_ganado", handle_win)
+    on("hola", lambda: print("hola"))
+    on("chau", lambda: print("chau"))
+    on("cambio_de_nivel", handle_level_change)
     while ejecutando:
         # 👇 Acá manejamos los eventos de teclado y mouse
         events = pygame.event.get()

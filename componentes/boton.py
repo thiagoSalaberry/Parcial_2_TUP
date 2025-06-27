@@ -38,7 +38,16 @@ def crear_boton(
         "font": font
     }
 
-def render_boton(area: Surface, boton: dict) -> None:
+
+def manejar_click_boton(boton: dict, eventos: list[pygame.event.Event]) -> None:
+    for evento in eventos:
+        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+            if boton["rect"].collidepoint(evento.pos):
+                boton["callback"]()
+
+
+def boton(area: Surface, boton: dict, eventos: list[pygame.event.Event]) -> None:
+    boton = crear_boton(boton["pos"][0], boton["pos"][1], boton["valor"], boton["callback"])
     rect: pygame.Rect = boton["rect"]
     sombra_rect: pygame.Rect = boton["sombra_rect"]
     pygame.draw.rect(area, COLOR_BOTON_SOMBRA, sombra_rect, border_radius=5)
@@ -50,9 +59,4 @@ def render_boton(area: Surface, boton: dict) -> None:
             rect.centery - boton["area_texto"].get_height() // 2
         )
     )
-
-def manejar_click_boton(boton: dict, eventos: list[pygame.event.Event]) -> None:
-    for evento in eventos:
-        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
-            if boton["rect"].collidepoint(evento.pos):
-                boton["callback"]()
+    manejar_click_boton(boton, eventos)

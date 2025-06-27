@@ -56,26 +56,39 @@ def siguiente(i_palabra_actual: int):
 
 
 def verificar_palabra():
-        palabra_actual = get_estado("palabra_actual")
-        if len(palabra_actual) == 4:
-            trigger("palabra_completada")
+    palabra_actual, palabras = get_estado("palabra_actual"), get_estado("palabras")
+    print(len(palabras[0]))
+    print(len(palabra_actual) == len(palabras[0]))
+    if len(palabra_actual) == len(palabras[0]):
+        trigger("palabra_completada")
 
-def handle_win(nivel_actual: str) -> None:
+def handle_win() -> None:
     print("Ganaste el nivel!")
     set_estado({ "estado_nivel_actual": "ganado" })
 
 def siguiente_nivel(nivel_actual: str) -> None:
+    siguiente = "intermedio" if nivel_actual == "facil" else "dificil"
+    print(f"Nos vamos al nivel {siguiente}")
+    set_estado({ "nivel_actual": siguiente })
+    trigger("cambio_de_nivel")
+
+# def handle_level_change(nivel_actual: str) -> None:
+def handle_level_change() -> None:
     data_niveles = leer_niveles()
+    nivel_actual = get_estado("nivel_actual")
+    print(f"Estamos en el nivel {nivel_actual}")
+    lo_que_toma = "intermedio" if nivel_actual == "facil" else "dificil"
+    print(f"Lo que toma {lo_que_toma}")
     nuevo_estado = {
-        "nivel_actual": "intermedio" if nivel_actual == "facil" else "dificil",
+        # "nivel_actual": "intermedio" if nivel_actual == "facil" else "dificil",
         "estado_nivel_actual": "jugando",
         "i_palabra_actual": 0,
         "palabra_actual": "",
         "palabras_completadas": [""] * 8,
-        "palabras": data_niveles["intermedio" if nivel_actual == "facil" else "dificil"]["palabras"],
+        "palabras": data_niveles[nivel_actual]["palabras"],
         "acertadas": [False] * 8,
         "palabras_validadas": [False] * 8,
-        "pistas": data_niveles["intermedio" if nivel_actual == "facil" else "dificil"]["pistas"],
+        "pistas": data_niveles[nivel_actual]["pistas"],
     }
     set_estado(nuevo_estado)
 
@@ -93,10 +106,11 @@ def nivel_terminado():
 def handle_points() -> None:
         i_palabra_actual = get_estado("i_palabra_actual")
         palabra_correcta = get_estado("palabras")[i_palabra_actual]
+        palabras = get_estado("palabras")
         palabra_actual = get_estado("palabra_actual")
         acertadas = get_estado("acertadas")
         score = get_estado("score")
-        if len(palabra_actual) == 4:
+        if len(palabra_actual) == len(palabras[0]):
             if palabra_actual == palabra_correcta:
                 acertadas[i_palabra_actual] = True
                 set_estado({ "score": score + 10, "acertadas": acertadas })

@@ -12,22 +12,21 @@ def ir_a_palabra(i: int) -> None:
         set_estado({ "i_palabra_actual": i })
 
 
-def rn_palabra(
+def palabra(
     area: Surface,
     eventos: list[pygame.event.Event],
-    palabra_correcta: str,
-    i: int,
-    pos: tuple[int, int],
+    palabra_el: dict,
     font: Font = None
 ) -> None:
     if not font:
         font = pygame.font.SysFont(None, 24)
-    
-    palabras_completadas, palabras, i_palabra_actual = get_estado("palabras_completadas"), get_estado("palabras"), get_estado("i_palabra_actual")
+
+    palabra_correcta, i, pos = palabra_el["correcta"], palabra_el["valor"], palabra_el["pos"]
+    palabras, palabras_completadas, i_palabra_actual = get_estado("palabras"), get_estado("palabras_completadas"), get_estado("i_palabra_actual")
     palabra = palabras_completadas[i]
 
     bien = palabra == palabra_correcta
-    mal = len(palabra) == 4 and palabra != palabra_correcta
+    mal = len(palabra) == len(palabras[0]) and palabra != palabra_correcta
 
     if bien:
         estado_palabra = "bien"
