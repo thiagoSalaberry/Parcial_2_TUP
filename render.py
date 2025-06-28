@@ -43,3 +43,6 @@ def render_pantalla(
     for input in inputs:
         render_input(area, input)
         manejar_click_input(input, eventos)
+
+COLOR_TEXTO = (9, 5, 250)
+COLOR_BOTON = (245, 206, 10)

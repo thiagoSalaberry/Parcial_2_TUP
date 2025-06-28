@@ -50,3 +50,5 @@ MENSAJE_DE_SALIDA = f"¡Gracias por jugar a {negrita("CODY CROSS")}!\n¡Hasta la
 
 # font = pygame.font.Font("assets/font.ttf", 24)
 color = (203, 219,  208)
+COLOR_TEXTO = (240, 238, 233)
+COLOR_BOTON = (197, 65, 13)

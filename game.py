@@ -22,8 +22,8 @@ def ingresar_palabra(i_palabra: int, palabra: str) -> None:
         "palabras_completadas": palabras_completadas
     })
 
-COLOR_TEXTO = (255, 255, 255)
-COLOR_BOTON = (50, 50, 50)
+COLOR_TEXTO = (9, 5, 250)
+COLOR_BOTON = (245, 206, 10)
 
 
 def leer_niveles(arch_niveles: str = ARCH_NIVELES) -> dict:
