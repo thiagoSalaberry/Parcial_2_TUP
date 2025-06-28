@@ -22,13 +22,8 @@ def main() -> None:
     os.system("cls")
     pygame.init()
     pygame.mixer.init()
-    # correcto = pygame.mixer.Sound("assets/correcto.mp3")
-    # error = pygame.mixer.Sound("assets/error.mp3")
-    # ganar = pygame.mixer.Sound("assets/ganar.mp3")
-    # inicio = pygame.mixer.Sound("assets/inicio.mp3")
    
     sound("inicio")
-    # ganar.play()
     
     
 
