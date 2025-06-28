@@ -10,7 +10,7 @@ from componentes.boton import *
 from componentes.texto import texto
 from constantes import ARCH_NIVELES
 from eventos import on, trigger
-from utils.utils_pygame import *
+from utils.utils_pygame import handle_level_change
 import json
 
 
