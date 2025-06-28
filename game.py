@@ -14,8 +14,8 @@ from utils.utils_pygame import handle_level_change
 import json
 
 
-COLOR_TEXTO = (255, 255, 255)
-COLOR_BOTON = (50, 50, 50)
+COLOR_TEXTO = (9, 5, 250)
+COLOR_BOTON = (245, 206, 10)
 
 
 def main() -> None:

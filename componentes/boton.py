@@ -51,7 +51,7 @@ def boton(area: Surface, boton: dict, eventos: list[pygame.event.Event]) -> None
     boton = crear_boton(boton["pos"][0], boton["pos"][1], boton["valor"], boton["callback"])
     rect: pygame.Rect = boton["rect"]
     sombra_rect: pygame.Rect = boton["sombra_rect"]
-    pygame.draw.rect(area, COLOR_BOTON_SOMBRA, sombra_rect, border_radius=5)
+    # pygame.draw.rect(area, COLOR_BOTON_SOMBRA, sombra_rect, border_radius=5)
     pygame.draw.rect(area, COLOR_BOTON, rect, border_radius=5)
     area.blit(
         boton["area_texto"],

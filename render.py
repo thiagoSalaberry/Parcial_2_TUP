@@ -9,6 +9,7 @@ from componentes.input import crear_input, render_input, manejar_click_input
 from estado import get_estado, set_estado
 from componentes.palabra import palabra
 from utils.utils_pygame import *
+from pantallas import pant_inicio, pant_jugar, pant_estadisticas, pant_creditos
 import sys
 data_niveles = leer_niveles()
 els_pantallas = {
@@ -59,7 +60,12 @@ els_pantallas = {
         { "tipo": "boton",  "valor": "Volver",   "pos": (690, 550), "callback": lambda: cambiar_pantalla("creditos") },
     ]
 }
-
+els_pantallas = {
+    "inicio": pant_inicio,
+    "jugar": pant_jugar,
+    "estadisticas": pant_estadisticas,
+    "creditos": pant_creditos,
+}
 def render_pantalla(
     area: Surface,
     eventos: list[pygame.event.Event],
@@ -162,3 +168,7 @@ def render_nivel(area: Surface, events: list[pygame.event.Event], font: Font):
             font=font
         )
 
+
+
+COLOR_TEXTO = (9, 5, 250)
+COLOR_BOTON = (245, 206, 10)

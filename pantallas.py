@@ -3,19 +3,25 @@ from utils.utils_pygame import cambiar_pantalla
 from estado import get_estado
 
 pant_inicio = [
+    { "tipo": "boton", "valor": "Jugar",        "pos": (180, 520), "callback": lambda: cambiar_pantalla("jugar") },
+    { "tipo": "boton", "valor": "Estadísticas", "pos": (280, 520), "callback": lambda: cambiar_pantalla("estadisticas") },
+    { "tipo": "boton", "valor": "Créditos",     "pos": (430, 520), "callback": lambda: cambiar_pantalla("creditos") },
+    { "tipo": "boton", "valor": "Salir",        "pos": (550, 520), "callback": lambda: sys.exit(0) },
+]
+
+"""pant_inicio = [
     { "tipo": "boton", "valor": "Jugar",        "pos": (370, 200), "callback": lambda: cambiar_pantalla("jugar") },
     { "tipo": "boton", "valor": "Estadísticas", "pos": (345, 260), "callback": lambda: cambiar_pantalla("estadisticas") },
     { "tipo": "boton", "valor": "Créditos",     "pos": (360, 320), "callback": lambda: cambiar_pantalla("creditos") },
     { "tipo": "boton", "valor": "Salir",        "pos": (375, 380), "callback": lambda: sys.exit(0) },
-]
+]"""
 nivel_actual = get_estado("nivel_actual")
 palabras = get_estado("palabras")
 pant_jugar = [
-    { "tipo": "texto",  "valor": "Nivel: 1",                "pos": (55, 30) },
-    { "tipo": "texto",  "valor": "Puntos: 0",               "pos": (60, 50) },
+    { "tipo": "texto",  "valor": "Nivel: 1",                "pos": (665, 30) },
+    { "tipo": "texto",  "valor": "Puntos: 0",               "pos": (680, 50) },
     { "tipo": "texto",  "valor": "Pista: Ejemplo de pista", "pos": (400, 530) },
-    { "tipo": "boton",  "valor": "Volver",                  "pos": (690, 550), "callback": lambda: cambiar_pantalla("inicio") },
-    { "tipo": "palabra",  "valor": "PESO",                  "pos": (450, 450), "callback": lambda: cambiar_pantalla("inicio") },
+    { "tipo": "boton",  "valor": "Volver",                  "pos": (15, 550), "callback": lambda: cambiar_pantalla("inicio") },
 ]
 
 pant_estadisticas = [
@@ -30,7 +36,7 @@ pant_estadisticas = [
     { "tipo": "texto",  "valor": "8 - Emma", "pos": (400, 365) },
     { "tipo": "texto",  "valor": "9 - Joaquín", "pos": (400, 405) },
     { "tipo": "texto",  "valor": "10 - Olivia", "pos": (400, 445) },
-    { "tipo": "boton",  "valor": "Volver",                  "pos": (690, 550), "callback": lambda: cambiar_pantalla("inicio") },
+    { "tipo": "boton",  "valor": "Volver",                  "pos": (15, 550), "callback": lambda: cambiar_pantalla("inicio") },
 ]
 
 pant_creditos = [
@@ -49,5 +55,5 @@ pant_creditos = [
     { "tipo": "texto",  "valor": "Emails de contacto:", "pos": (400, 445) },
     { "tipo": "texto",  "valor": "bautyruiz1011@gmail.com", "pos": (400, 475) },
     { "tipo": "texto",  "valor": "thiagosalaberry99@gmail.com", "pos": (400, 505) },
-    { "tipo": "boton",  "valor": "Volver",   "pos": (690, 550), "callback": lambda: cambiar_pantalla("inicio") },
+    { "tipo": "boton",  "valor": "Volver",   "pos": (15, 550), "callback": lambda: cambiar_pantalla("inicio") },
 ]
