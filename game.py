@@ -1,21 +1,10 @@
 import pygame
 import os
 import sys
-from pygame import Surface
-from pygame.font import Font
-from estado import estado, get_estado, set_estado, subscribe
-from pantallas import pant_creditos, pant_estadisticas, pant_inicio, pant_jugar
+from estado import get_estado, set_estado
 from render import *
-from componentes.boton import *
-from componentes.texto import texto
-from constantes import ARCH_NIVELES
-from eventos import on, trigger
+from eventos import on
 from utils.utils_pygame import handle_level_change
-import json
-
-
-COLOR_TEXTO = (9, 5, 250)
-COLOR_BOTON = (245, 206, 10)
 
 
 def main() -> None:
@@ -23,13 +12,9 @@ def main() -> None:
     pygame.init()
     pygame.mixer.init()
    
-    sound("inicio")
-    
-    
+    # sound("inicio")
 
-    ancho = 800
-    alto = 600
-    color = (203, 219,  208)
+    ancho, alto = 800, 600
 
     screen = pygame.display.set_mode((ancho, alto))
 
@@ -41,6 +26,7 @@ def main() -> None:
     fondo = pygame.image.load("assets/fondo.png").convert()
     fondo = pygame.transform.scale(fondo, screen.get_size())
 
+    # Inicializamos el estado
     data_niveles = leer_niveles()
     set_estado({
         "pantalla": "inicio",
@@ -53,12 +39,14 @@ def main() -> None:
         "pistas": data_niveles["facil"]["pistas"]
     })   
 
+    # Cargamos los eventos
     on("palabra_completada", handle_points)
-    on("nivel_ganado", handle_win)
-    on("hola", lambda: print("hola"))
-    on("chau", lambda: print("chau"))
+    on("nivel_ganado", handle_win_level)
     on("cambio_de_nivel", handle_level_change)
-    pantalla = get_estado("pantalla")
+    on("juego_ganado", handle_win_game)
+
+    # Bucle principal del juego
+    abc = "abcdefghijklmnñopqrstuvwxyz"
     while ejecutando:
         # 👇 Acá manejamos los eventos de teclado y mouse
         events = pygame.event.get()
@@ -67,21 +55,36 @@ def main() -> None:
                 pygame.quit()
                 sys.exit(0)
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_TAB:
-                    i_palabra_actual = get_estado("i_palabra_actual")
-                    siguiente(i_palabra_actual)
-                elif event.key == pygame.K_BACKSPACE:
-                    borrar_letra()
-                else:
-                    code = event.unicode
-                    if code in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-                        set_estado({ "i_palabra_actual": int(code) - 1 })
+                pantalla, estado_nivel_actual = get_estado("pantalla"), get_estado("estado_nivel_actual")
+                if pantalla == "jugar" and estado_nivel_actual == "jugando":
+                    if event.key == pygame.K_TAB:
+                        siguiente()
+                    elif event.key == pygame.K_BACKSPACE:
+                        borrar_letra()
                     else:
-                        ingresar_letra(code.upper())
+                        code = event.unicode
+                        if code in "12345678":
+                            set_estado({ "i_palabra_actual": int(code) - 1 })
+                        else:
+                            ingresar_letra(code.upper())
 
         screen.blit(fondo, (0, 0))
+        pantalla, juego_ganado = get_estado("pantalla"), get_estado("juego_ganado")
+        if pantalla != "inicio":
+            overlay = pygame.Surface((ancho, alto), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 128))  # 128 = 0.5 de opacidad
 
+            # Blittear la capa encima del fondo
+            screen.blit(overlay, (0, 0))
         render_pantalla(screen, events, font)
+
+        if juego_ganado:
+            texto_victoria = {
+                "tipo": "texto",
+                "valor": "¡GANASTE!",
+                "pos": (ancho // 2, alto // 2)
+            }
+            texto(screen, texto_victoria, font)
 
         pygame.display.flip()
         clock.tick(60)

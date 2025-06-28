@@ -11,6 +11,7 @@ estado = {
         "acertadas": [],
         "palabras_validadas": [],
         "pistas": [],
+        "juego_ganado": False
     },
     "listeners": []
 }
@@ -40,8 +41,3 @@ def set_estado(nuevos_valores: dict) -> None:
     if cambios:
         for listener in estado["listeners"]:
             listener()
-
-
-def subscribe(callback: callable) -> None:
-    estado["listeners"].append(callback)
-

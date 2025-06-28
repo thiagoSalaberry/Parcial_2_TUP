@@ -11,6 +11,8 @@ from componentes.palabra import palabra
 from utils.utils_pygame import *
 from pantallas import pant_inicio, pant_jugar, pant_estadisticas, pant_creditos
 import sys
+
+
 data_niveles = leer_niveles()
 els_pantallas = {
     "inicio": [
@@ -66,6 +68,18 @@ els_pantallas = {
     "estadisticas": pant_estadisticas,
     "creditos": pant_creditos,
 }
+
+
+def render_el(area: Surface, eventos: list[pygame.event.Event], el: dict, font: Font) -> None:
+    match el["tipo"]:
+        case "texto":
+            texto(area, el, font)
+        case "boton":
+            boton(area, el, eventos)
+        case "palabra":
+            palabra(area, eventos, el)
+
+
 def render_pantalla(
     area: Surface,
     eventos: list[pygame.event.Event],
@@ -79,6 +93,7 @@ def render_pantalla(
     """
     pantalla, nivel_actual, estado_nivel_actual, palabras, pistas, score, i_palabra_actual = get_estado("pantalla"), get_estado("nivel_actual"), get_estado("estado_nivel_actual"), get_estado("palabras"), get_estado("pistas"), get_estado("score"), get_estado("i_palabra_actual")
     els = els_pantallas[pantalla]
+
     if pantalla == "jugar":
         palabras_nivel = []
         for i, pal in enumerate(palabras):
@@ -107,77 +122,9 @@ def render_pantalla(
                 "tipo": "boton",
                 "valor": "Siguiente nivel",
                 "pos": (630, 550),
-                "callback": lambda: siguiente_nivel(nivel_actual)
+                "callback": siguiente_nivel
             }
             els.append(boton_siguiente)
 
-    def render_el(area: Surface, eventos: list[pygame.event.Event], el: dict, **kwargs) -> None:
-        match el["tipo"]:
-            case "texto":
-                texto(area, el, font)
-            case "boton":
-                boton(area, el, eventos)
-            case "palabra":
-                palabra(area, eventos, el)
-
-
     for el in els:
-        render_el(area, eventos, el)
-    # botones = []
-    # inputs = []
-    # if pantalla != "jugar":
-    #     for el in els:
-    #         if el["tipo"] == "texto":
-    #             texto(area, el, font)
-    #         elif el["tipo"] == "boton":
-    #             x, y = el["pos"]
-    #             boton = crear_boton(x, y, el["valor"], el["callback"], font=font)
-    #             botones.append(boton)
-    #         elif el["tipo"] == "input":
-    #             x, y = el["pos"]
-    #             input = crear_input(x, y, el["valor"], False, el["callback"])
-    #             inputs.append(input)
-    #         elif el["tipo"] == "pantalla":
-    #             x, y = el["pos"]
-    #             # crear_palabra(area, x, y, el["valor"], False, lambda: cambiar_pantalla("pantalla", "inicio"), eventos)
-
-    #     estado_nivel_actual = get_estado("estado_nivel_actual")
-    #     if estado_nivel_actual == "ganado":
-    #         nivel_actual = get_estado("nivel_actual")
-    #         boton_siguiente = crear_boton(500, 150, "Siguiente nivel", lambda: print(nivel_actual))
-    #         botones.append(boton_siguiente)
-
-        
-    #     for boton in botones:
-    #         boton(area, boton)
-    #         manejar_click_boton(boton, eventos)
-    #     for input in inputs:
-    #         render_input(area, input)
-    #         manejar_click_input(input, eventos)
-    # else:
-    #     palabras_correctas = get_estado("palabras")
-    #     for i, palabra in enumerate(palabras_correctas):
-    #         palabra(area, eventos, palabra, i, (40, i + 60 * i), font)
-
-def render_nivel(area: Surface, events: list[pygame.event.Event], font: Font):
-    nivel_actual = get_estado("nivel_actual")
-    data_niveles = leer_niveles()
-    datos_nivel = data_niveles[nivel_actual]
-    palabras = datos_nivel["palabras"]
-    pistas = datos_nivel["pistas"]
-
-    for i, palabra in enumerate(palabras):
-        pos = (100, i + i * 70)
-        palabra(
-            area=area,
-            eventos=events,
-            palabra_correcta=palabra,
-            i=i,
-            pos=pos,
-            font=font
-        )
-
-
-
-COLOR_TEXTO = (9, 5, 250)
-COLOR_BOTON = (245, 206, 10)
+        render_el(area, eventos, el, font)
