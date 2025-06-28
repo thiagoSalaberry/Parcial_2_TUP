@@ -1,6 +1,7 @@
 import pygame
 from constantes import COLOR_TEXTO, COLOR_BOTON, COLOR_BOTON_SOMBRA
 from pygame import Surface
+from estado import get_estado
 
 def crear_boton(
     x: int,

@@ -19,20 +19,6 @@ els_pantallas = {
         { "tipo": "boton", "valor": "Créditos",     "pos": (400, 320), "callback": lambda: cambiar_pantalla("creditos") },
         { "tipo": "boton", "valor": "Salir",        "pos": (400, 380), "callback": lambda: sys.exit(0) },
     ],
-    # "jugar": {
-    #     "facil": {
-    #         "palabras": data_niveles["facil"]["palabras"],
-    #         "pistas": data_niveles["facil"]["pistas"]
-    #     },
-    #     "intermedio": {
-    #         "palabras": data_niveles["intermedio"]["palabras"],
-    #         "pistas": data_niveles["intermedio"]["pistas"]
-    #     },
-    #     "dificil": {
-    #         "palabras": data_niveles["dificil"]["palabras"],
-    #         "pistas": data_niveles["dificil"]["pistas"]
-    #     },
-    # },
     "jugar": [
         { "tipo": "boton",  "valor": "Volver",   "pos": (690, 550), "callback": lambda: cambiar_pantalla("inicio") },
     ],
@@ -94,7 +80,7 @@ def render_pantalla(
                 "tipo": "palabra",
                 "valor": i,
                 "correcta": pal,
-                "pos": (40, 50 + 70 * i)
+                "pos": (100, 50 + 50 * i)
             }
             palabras_nivel.append(palabra_dict)
         els = els + palabras_nivel

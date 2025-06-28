@@ -18,7 +18,7 @@ def crear_input(
 
     area_texto = font.render(letra, True, COLOR_TEXTO)
 
-    ancho, alto = 60, 60
+    ancho, alto = 40, 40
 
     rect = pygame.Rect(x, y, ancho, alto)
 

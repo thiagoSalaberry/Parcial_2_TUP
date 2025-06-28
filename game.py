@@ -63,6 +63,7 @@ def main() -> None:
     on("hola", lambda: print("hola"))
     on("chau", lambda: print("chau"))
     on("cambio_de_nivel", handle_level_change)
+    pantalla = get_estado("pantalla")
     while ejecutando:
         # 👇 Acá manejamos los eventos de teclado y mouse
         events = pygame.event.get()
@@ -82,7 +83,7 @@ def main() -> None:
                         set_estado({ "i_palabra_actual": int(code) - 1 })
                     else:
                         ingresar_letra(code.upper())
-                    
+
         screen.blit(fondo, (0, 0))
 
         render_pantalla(screen, events, font)

@@ -42,7 +42,7 @@ def palabra(
             char = palabra[j]
         else:
             char = ""
-        letra = crear_input(x + (x + j * 70), y, char, i == i_palabra_actual, estado_palabra, lambda: ir_a_palabra(i), font)
+        letra = crear_input(x + (x + j * 50), y, char, i == i_palabra_actual, estado_palabra, lambda: ir_a_palabra(i), font)
         letras.append(letra)
 
     for letra in letras:
