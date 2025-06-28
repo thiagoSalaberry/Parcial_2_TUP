@@ -77,7 +77,7 @@ def render_pantalla(
     - Llama a render_el y le pasa cada uno de los elementos
     Recibe el area sobre la cual renderizar y los eventos a pasar
     """
-    pantalla, nivel_actual, estado_nivel_actual, palabras, palabras_completadas = get_estado("pantalla"), get_estado("nivel_actual"), get_estado("estado_nivel_actual"), get_estado("palabras"), get_estado("palabras_completadas")
+    pantalla, nivel_actual, estado_nivel_actual, palabras, pistas, score, i_palabra_actual = get_estado("pantalla"), get_estado("nivel_actual"), get_estado("estado_nivel_actual"), get_estado("palabras"), get_estado("pistas"), get_estado("score"), get_estado("i_palabra_actual")
     els = els_pantallas[pantalla]
     if pantalla == "jugar":
         palabras_nivel = []
@@ -90,14 +90,23 @@ def render_pantalla(
             }
             palabras_nivel.append(palabra_dict)
         els = els + palabras_nivel
-    if pantalla == "jugar":
-        nivel = {"tipo": "texto", "valor": nivel_actual, "pos": (50, 100)}
+        if nivel_actual == "facil":
+            nivel_n = "1"
+        if nivel_actual == "intermedio":
+            nivel_n = "2"
+        if nivel_actual == "dificil":
+            nivel_n = "3"
+        nivel = {"tipo": "texto", "valor": f"Nivel: {nivel_n}", "pos": (665, 30)}
+        score = {"tipo": "texto", "valor": f"Puntos: {score}", "pos": (680, 50)}
+        pista = {"tipo": "texto", "valor": f"{pistas[i_palabra_actual]}", "pos": (400, 530)}
         els.append(nivel)
+        els.append(score)
+        els.append(pista)
         if estado_nivel_actual == "ganado":
             boton_siguiente = {
                 "tipo": "boton",
                 "valor": "Siguiente nivel",
-                "pos": (50, 500),
+                "pos": (630, 550),
                 "callback": lambda: siguiente_nivel(nivel_actual)
             }
             els.append(boton_siguiente)

@@ -18,9 +18,8 @@ pant_inicio = [
 nivel_actual = get_estado("nivel_actual")
 palabras = get_estado("palabras")
 pant_jugar = [
-    { "tipo": "texto",  "valor": "Nivel: 1",                "pos": (665, 30) },
-    { "tipo": "texto",  "valor": "Puntos: 0",               "pos": (680, 50) },
-    { "tipo": "texto",  "valor": "Pista: Ejemplo de pista", "pos": (400, 530) },
+    # { "tipo": "texto",  "valor": "Puntos: 0",               "pos": (680, 50) },
+    # { "tipo": "texto",  "valor": "Pista: Ejemplo de pista", "pos": (400, 530) },
     { "tipo": "boton",  "valor": "Volver",                  "pos": (15, 550), "callback": lambda: cambiar_pantalla("inicio") },
 ]
 

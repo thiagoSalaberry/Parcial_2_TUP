@@ -3,6 +3,7 @@ from estado import get_estado, set_estado
 from eventos import on, trigger
 from constantes import ARCH_NIVELES
 import json
+import os
 
 def ingresar_letra(letra: str) -> None:
     i_palabra_actual = get_estado("i_palabra_actual")
@@ -65,6 +66,7 @@ def verificar_palabra():
 def handle_win() -> None:
     print("Ganaste el nivel!")
     set_estado({ "estado_nivel_actual": "ganado" })
+    sound("ganar")
 
 def siguiente_nivel(nivel_actual: str) -> None:
     siguiente = "intermedio" if nivel_actual == "facil" else "dificil"
@@ -113,9 +115,11 @@ def handle_points() -> None:
         if len(palabra_actual) == len(palabras[0]):
             if palabra_actual == palabra_correcta:
                 acertadas[i_palabra_actual] = True
+                sound("correcto")
                 set_estado({ "score": score + 10, "acertadas": acertadas })
                 siguiente(i_palabra_actual)
             else:
+                sound("error")
                 set_estado({ "score": score - 5 })
 
 
@@ -131,3 +135,8 @@ def leer_niveles(arch_niveles: str = ARCH_NIVELES) -> dict:
         datos_niveles = json.load(archivo_niveles)
     
     return datos_niveles["niveles"]
+
+def sound(audio: str) -> None:
+    archivo = os.path.join("assets", f"{audio}.mp3")
+    sound = pygame.mixer.Sound(archivo)
+    sound.play()
