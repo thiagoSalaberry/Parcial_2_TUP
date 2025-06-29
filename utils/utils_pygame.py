@@ -1,6 +1,8 @@
 import pygame
 from estado import get_estado, set_estado
 from eventos import on, trigger
+from componentes.boton import *
+
 from constantes import ARCH_NIVELES
 import json
 import os
@@ -158,3 +160,52 @@ def sound(audio: str) -> None:
     archivo = os.path.join("assets", f"{audio}.mp3")
     sound = pygame.mixer.Sound(archivo)
     sound.play()
+
+
+def grupo(
+    elementos: list[dict],
+    direccion: str = "horizontal",
+    gap: int = 10,
+    pos_inicial: tuple[int, int] = (0, 0),
+    area: pygame.Surface = None,
+    eventos: list[pygame.event.Event] = None
+) -> None:
+    x_actual, y_actual = pos_inicial
+
+    for el in elementos:
+        if "get_size" in el:
+            ancho, alto = el["get_size"]()
+        else:
+            ancho = el.get("ancho")
+            alto = el.get("alto")
+
+        if "render" in el:
+            el["render"](area, (x_actual, y_actual), eventos)
+        
+        if direccion == "horizontal":
+            x_actual += ancho + gap
+        elif direccion == "vertical":
+            y_actual += alto + gap
+
+def wrap_boton(boton_dict: dict, font: pygame.font.Font) -> None:
+    data_boton = crear_boton(0, 0, boton_dict["valor"], boton_dict["callback"], font=font)
+
+    def render(area: pygame.Surface, pos: tuple[int, int], eventos: list[pygame.event.Event]) -> None:
+        data_boton["rect"].topleft = pos
+        data_boton["sombra_rect"].topleft = (pos[0], pos[1] + 4)
+        pygame.draw.rect(area, COLOR_BOTON_SOMBRA, data_boton["sombra_rect"], border_radius=5)
+        pygame.draw.rect(area, COLOR_BOTON, data_boton["rect"], border_radius=5)
+        area.blit(
+            data_boton["area_texto"],
+            (
+                data_boton["rect"].centerx - data_boton["area_texto"].get_width() // 2,
+                data_boton["rect"].centery - data_boton["area_texto"].get_height() // 2,
+            )
+        )
+        manejar_click_boton(data_boton, eventos)
+    
+    return {
+        "render": render,
+        "ancho": data_boton["ancho"],
+        "alto": data_boton["alto"],
+    }

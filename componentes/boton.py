@@ -1,4 +1,5 @@
 import pygame
+from pygame.font import Font
 from constantes import COLOR_TEXTO, COLOR_BOTON, COLOR_BOTON_SOMBRA
 from pygame import Surface
 from estado import get_estado
@@ -32,6 +33,8 @@ def crear_boton(
 
     return {
         "texto": texto,
+        "ancho": ancho,
+        "alto": alto,
         "rect": rect,
         "sombra_rect": sombra_rect,
         "callback": callback,
@@ -47,11 +50,11 @@ def manejar_click_boton(boton: dict, eventos: list[pygame.event.Event]) -> None:
                 boton["callback"]()
 
 
-def boton(area: Surface, boton: dict, eventos: list[pygame.event.Event]) -> None:
-    boton = crear_boton(boton["pos"][0], boton["pos"][1], boton["valor"], boton["callback"])
+def boton(area: Surface, boton: dict, eventos: list[pygame.event.Event], font: Font) -> None:
+    boton = crear_boton(boton["pos"][0], boton["pos"][1], boton["valor"], boton["callback"], font=font)
     rect: pygame.Rect = boton["rect"]
     sombra_rect: pygame.Rect = boton["sombra_rect"]
-    # pygame.draw.rect(area, COLOR_BOTON_SOMBRA, sombra_rect, border_radius=5)
+    pygame.draw.rect(area, COLOR_BOTON_SOMBRA, sombra_rect, border_radius=5)
     pygame.draw.rect(area, COLOR_BOTON, rect, border_radius=5)
     area.blit(
         boton["area_texto"],

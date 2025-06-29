@@ -5,10 +5,10 @@ from estado import get_estado, set_estado
 from render import *
 from eventos import on
 from utils.utils_pygame import handle_level_change
-
+from ui.boton import *
 
 def main() -> None:
-    os.system("cls")
+    # os.system("cls")
     pygame.init()
     pygame.mixer.init()
    
@@ -29,14 +29,14 @@ def main() -> None:
     # Inicializamos el estado
     data_niveles = leer_niveles()
     set_estado({
-        "pantalla": "inicio",
-        "nivel_actual": "facil",
+        "pantalla": "jugar",
+        "nivel_actual": "dificil",
         "estado_nivel_actual": "jugando",
-        "palabras": data_niveles["facil"]["palabras"],
+        "palabras": data_niveles["dificil"]["palabras"],
         "palabras_validadas": [False] * 8,
         "palabras_completadas": [""] * 8,
         "acertadas": [False] * 8,
-        "pistas": data_niveles["facil"]["pistas"]
+        "pistas": data_niveles["dificil"]["pistas"]
     })   
 
     # Cargamos los eventos
@@ -76,16 +76,24 @@ def main() -> None:
 
             # Blittear la capa encima del fondo
             screen.blit(overlay, (0, 0))
-        render_pantalla(screen, events, font)
+        # render_pantalla(screen, events, font)
 
-        if juego_ganado:
-            texto_victoria = {
-                "tipo": "texto",
-                "valor": "¡GANASTE!",
-                "pos": (ancho // 2, alto // 2)
-            }
-            texto(screen, texto_victoria, font)
+        i_palabra_actual, palabras, palabras_completadas = get_estado("i_palabra_actual"), get_estado("palabras"), get_estado("palabras_completadas")
 
+        for i, correcta in enumerate(palabras):
+            ingresada = palabras_completadas[i]
+            palabra = wrap_palabra(
+                correcta,
+                ingresada,
+                i,
+                i_palabra_actual,
+                lambda: set_estado({"i_palabra_actual": i}),
+                font
+            )
+            x = (800 - palabra["ancho"]) // 2
+            y = 54 * i
+            palabra["render"](screen, (x, y), events)
+        
         pygame.display.flip()
         clock.tick(60)
 
