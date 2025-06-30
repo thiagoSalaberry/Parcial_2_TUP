@@ -2,7 +2,7 @@ import pygame
 from pygame import Surface
 from pygame.font import Font
 from constantes import COLOR_TEXTO, COLOR_BOTON
-from componentes.boton import crear_boton, boton, manejar_click_boton
+from componentes.boton import crear_boton, boton as button, manejar_click_boton
 from utils.utils_pygame import cambiar_pantalla, leer_niveles
 from componentes.texto import *
 from componentes.input import crear_input, render_input, manejar_click_input
@@ -10,6 +10,7 @@ from estado import get_estado, set_estado
 from componentes.palabra import palabra
 from utils.utils_pygame import *
 from pantallas import pant_inicio, pant_jugar, pant_estadisticas, pant_creditos
+from ui.boton import wrap_palabra
 import sys
 
 
@@ -75,7 +76,7 @@ def render_el(area: Surface, eventos: list[pygame.event.Event], el: dict, font: 
         case "texto":
             texto(area, el, font)
         case "boton":
-            boton(area, el, eventos)
+            button(area, el, eventos, font)
         case "palabra":
             palabra(area, eventos, el)
 
@@ -91,6 +92,58 @@ def render_pantalla(
     - Llama a render_el y le pasa cada uno de los elementos
     Recibe el area sobre la cual renderizar y los eventos a pasar
     """
+    els = []
+    pantalla = get_estado("pantalla")
+    if pantalla == "inicio":
+        botones_dict = [
+            {"valor": "Jugar", "callback": lambda: set_estado({"pantalla": "jugar"})},
+            {"valor": "Estadisticas", "callback": lambda: set_estado({"pantalla": "estadisticas"})},
+            {"valor": "Créditos", "callback": lambda: set_estado({"pantalla": "creditos"})},
+            {"valor": "Salir", "callback": lambda: sys.exit(0)},
+        ]
+        botones = []
+        for i, boton_dict in enumerate(botones_dict):
+            boton = wrap_boton(
+                boton_dict,
+                font
+            )
+            botones.append(boton)
+        grupo(
+            botones,
+            "horizontal",
+            10,
+            ((800 - sum(b["ancho"] for b in botones) - 10 * (len(botones) - 1)) / 2, 600 - 75),
+            area,
+            eventos
+        )
+    elif pantalla == "jugar":
+        palabras, palabras_completadas, i_palabra_actual, estado_nivel_actual = get_estado("palabras"), get_estado("palabras_completadas"), get_estado("i_palabra_actual"), get_estado("estado_nivel_actual")
+        for i, correcta in enumerate(palabras):
+            ingresada = palabras_completadas[i]
+            palabra = wrap_palabra(
+                correcta,
+                ingresada,
+                i,
+                i_palabra_actual,
+                lambda: set_estado({"i_palabra_actual": i}),
+                font
+            )
+            x = (800 - palabra["ancho"]) // 2
+            y = 100 + 54 * i
+            palabra["render"](area, (x, y), eventos)
+        if estado_nivel_actual == "ganado":
+            siguiente_dict = { "tipo": "boton", "valor": "Siguiente nivel", "callback": siguiente_nivel, "pos": (500, 500) }
+            button(area, siguiente_dict, eventos, font)
+    elif pantalla == "estadisticas":
+        els = pant_estadisticas
+    elif pantalla == "creditos":
+        els = pant_creditos
+    
+    if pantalla != "inicio":
+        for el in els:
+            render_el(area, eventos, el, font)
+
+    return
     pantalla, nivel_actual, estado_nivel_actual, palabras, pistas, score, i_palabra_actual = get_estado("pantalla"), get_estado("nivel_actual"), get_estado("estado_nivel_actual"), get_estado("palabras"), get_estado("pistas"), get_estado("score"), get_estado("i_palabra_actual")
     els = els_pantallas[pantalla]
 

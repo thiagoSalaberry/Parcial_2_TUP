@@ -29,14 +29,14 @@ def main() -> None:
     # Inicializamos el estado
     data_niveles = leer_niveles()
     set_estado({
-        "pantalla": "jugar",
-        "nivel_actual": "dificil",
+        "pantalla": "inicio",
+        "nivel_actual": "facil",
         "estado_nivel_actual": "jugando",
-        "palabras": data_niveles["dificil"]["palabras"],
+        "palabras": data_niveles["facil"]["palabras"],
         "palabras_validadas": [False] * 8,
         "palabras_completadas": [""] * 8,
         "acertadas": [False] * 8,
-        "pistas": data_niveles["dificil"]["pistas"]
+        "pistas": data_niveles["facil"]["pistas"]
     })   
 
     # Cargamos los eventos
@@ -76,23 +76,44 @@ def main() -> None:
 
             # Blittear la capa encima del fondo
             screen.blit(overlay, (0, 0))
-        # render_pantalla(screen, events, font)
+        render_pantalla(screen, events, font)
 
-        i_palabra_actual, palabras, palabras_completadas = get_estado("i_palabra_actual"), get_estado("palabras"), get_estado("palabras_completadas")
+        # i_palabra_actual, palabras, palabras_completadas = get_estado("i_palabra_actual"), get_estado("palabras"), get_estado("palabras_completadas")
 
-        for i, correcta in enumerate(palabras):
-            ingresada = palabras_completadas[i]
-            palabra = wrap_palabra(
-                correcta,
-                ingresada,
-                i,
-                i_palabra_actual,
-                lambda: set_estado({"i_palabra_actual": i}),
-                font
-            )
-            x = (800 - palabra["ancho"]) // 2
-            y = 54 * i
-            palabra["render"](screen, (x, y), events)
+        # botones_dict = [
+        #     {"valor": "Jugar", "callback": lambda: print("Jugar")},
+        #     {"valor": "Estadisticas", "callback": lambda: print("Estadisticas")},
+        #     {"valor": "Créditos", "callback": lambda: print("Créditos")},
+        #     {"valor": "Salir", "callback": lambda: print("Salir")},
+        # ]
+        # botones = []
+        # for i, boton_dict in enumerate(botones_dict):
+        #     boton = wrap_boton(
+        #         boton_dict,
+        #         font
+        #     )
+        #     botones.append(boton)
+        # grupo(
+        #     botones,
+        #     "horizontal",
+        #     10,
+        #     ((800 - sum(b["ancho"] for b in botones) - 10 * (len(botones) - 1)) / 2, 600 - 75),
+        #     screen,
+        #     events
+        # )
+        # for i, correcta in enumerate(palabras):
+        #     ingresada = palabras_completadas[i]
+        #     palabra = wrap_palabra(
+        #         correcta,
+        #         ingresada,
+        #         i,
+        #         i_palabra_actual,
+        #         lambda: set_estado({"i_palabra_actual": i}),
+        #         font
+        #     )
+        #     x = (800 - palabra["ancho"]) // 2
+        #     y = 54 * i
+        #     palabra["render"](screen, (x, y), events)
         
         pygame.display.flip()
         clock.tick(60)
