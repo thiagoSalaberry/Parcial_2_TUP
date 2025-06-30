@@ -105,7 +105,7 @@ def cargar_estadisticas(puntos: int, arch_estad: str = ARCH_ESTAD) -> None:
     
 
 
-def leer_estadisticas(arch_estad: str = ARCH_ESTAD) -> list[str]:
+def leer_estadisticas(arch_estad: str = ARCH_ESTAD, print: bool = True) -> list[str]:
     with open(arch_estad, "r") as file:
         lineas = file.readlines()
 
@@ -113,17 +113,18 @@ def leer_estadisticas(arch_estad: str = ARCH_ESTAD) -> list[str]:
     
     # titulo = "🏅 Mejores 10 Jugadores 🏅"
     # print("-" * (len(titulo) + 12) + "\n" + " " * 5 + titulo + " " * 5 + "\n" + "-" * (len(titulo) + 12))
-    print(MENSAJE_DE_ESTADISTICAS)
-    for i, jugador in enumerate(estadisticas):
-        nombre, puntos = jugador.split(" - ")
-        if i == 0:
-            print(f"🥇 - {nombre}: {puntos}")
-        elif i == 1:
-            print(f"🥈 - {nombre}: {puntos}")
-        elif i == 2:
-            print(f"🥉 - {nombre}: {puntos}")
-        else:
-            print(f" {i + 1} - {nombre}: {puntos}")
+    if print:
+        print(MENSAJE_DE_ESTADISTICAS)
+        for i, jugador in enumerate(estadisticas):
+            nombre, puntos = jugador.split(" - ")
+            if i == 0:
+                print(f"🥇 - {nombre}: {puntos}")
+            elif i == 1:
+                print(f"🥈 - {nombre}: {puntos}")
+            elif i == 2:
+                print(f"🥉 - {nombre}: {puntos}")
+            else:
+                print(f" {i + 1} - {nombre}: {puntos}")
 
     return estadisticas
 

@@ -18,7 +18,7 @@ def crear_boton(
     if font is None:
         font = pygame.font.SysFont(None, 24)
 
-    area_texto = font.render(texto, True, COLOR_TEXTO)
+    area_texto = font.render(texto, True, (0, 0, 0))
     rect_texto = area_texto.get_rect()
 
     if tipo_ancho == "auto":

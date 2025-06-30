@@ -10,7 +10,9 @@ from estado import get_estado, set_estado
 from componentes.palabra import palabra
 from utils.utils_pygame import *
 from pantallas import pant_inicio, pant_jugar, pant_estadisticas, pant_creditos
-from ui.boton import wrap_palabra
+from ui.boton import wrap_palabra, wrap_boton, wrap_letra, wrap_texto
+from ui.recuadro import wrap_recuadro
+from funciones import leer_estadisticas
 import sys
 
 
@@ -94,6 +96,8 @@ def render_pantalla(
     """
     els = []
     pantalla = get_estado("pantalla")
+
+    # INICIO 👇
     if pantalla == "inicio":
         botones_dict = [
             {"valor": "Jugar", "callback": lambda: set_estado({"pantalla": "jugar"})},
@@ -116,8 +120,10 @@ def render_pantalla(
             area,
             eventos
         )
+    
+    # JUGAR 👇
     elif pantalla == "jugar":
-        palabras, palabras_completadas, i_palabra_actual, estado_nivel_actual = get_estado("palabras"), get_estado("palabras_completadas"), get_estado("i_palabra_actual"), get_estado("estado_nivel_actual")
+        palabras, palabras_completadas, pistas, i_palabra_actual, estado_nivel_actual, nivel_actual, score = get_estado("palabras"), get_estado("palabras_completadas"), get_estado("pistas"), get_estado("i_palabra_actual"), get_estado("estado_nivel_actual"), get_estado("nivel_actual"), get_estado("score")
         for i, correcta in enumerate(palabras):
             ingresada = palabras_completadas[i]
             palabra = wrap_palabra(
@@ -129,17 +135,56 @@ def render_pantalla(
                 font
             )
             x = (800 - palabra["ancho"]) // 2
-            y = 100 + 54 * i
+            y = 70 + 54 * i
             palabra["render"](area, (x, y), eventos)
-        if estado_nivel_actual == "ganado":
-            siguiente_dict = { "tipo": "boton", "valor": "Siguiente nivel", "callback": siguiente_nivel, "pos": (500, 500) }
+        niveles_map = {
+            "facil": "1",
+            "intermedio": "2",
+            "dificil": "3",
+        }
+        nivel = {"tipo": "texto", "valor": f"Nivel: {niveles_map[nivel_actual]}", "pos": (665, 30)}
+        score = {"tipo": "texto", "valor": f"Puntos: {score}", "pos": (680, 50)}
+        pista = {"tipo": "texto", "valor": f"{pistas[i_palabra_actual]}", "pos": (400, 510)}
+        els.append(nivel)
+        els.append(score)
+        els.append(pista)
+
+        if estado_nivel_actual == "ganado" and nivel_actual != "dificil":
+            siguiente_dict = { "tipo": "boton", "valor": "Siguiente nivel", "callback": siguiente_nivel, "pos": (585, 535) }
             button(area, siguiente_dict, eventos, font)
+    
+    # ESTADÍSTICAS 👇
     elif pantalla == "estadisticas":
         els = pant_estadisticas
+        estadisticas = leer_estadisticas(print=False)
+        wrappeables = []
+        for el in els:
+            if el["tipo"] == "texto":
+                wrappeables.append(wrap_texto({"valor": el["valor"]}, font))
+        for i, jugador in enumerate(estadisticas):
+            wrappeables.append(wrap_texto({"valor": f"{i + 1}. {jugador}"}, font))
+        recuadro = wrap_recuadro(wrappeables, padding=(40, 20), gap=10, direccion="vertical", font=font)
+        # Centramos el recuadro en pantalla
+        x = (800 - recuadro["ancho"]) // 2
+        y = (600 - recuadro["alto"]) // 2
+        recuadro["render"](area, (x, y), eventos)
+    
+    # CRÉDITOS 👇
     elif pantalla == "creditos":
         els = pant_creditos
+        wrappeables = []
+        for el in els:
+            wrappeables.append(wrap_texto({"valor": el["valor"]}, font))
+        recuadro = wrap_recuadro(wrappeables, padding=(40, 10), gap=0, direccion="vertical", font=font)
+        # Centramos el recuadro en pantalla
+        x = (800 - recuadro["ancho"]) // 2
+        y = (600 - recuadro["alto"]) // 2
+        recuadro["render"](area, (x, y), eventos)
     
-    if pantalla != "inicio":
+    if pantalla not in ["inicio"]:
+        volver_dict = {"tipo": "boton", "valor": "Volver", "callback": volver, "pos": (15, 535)}
+        render_el(area, eventos, volver_dict, font)
+        els.append(volver_dict)
         for el in els:
             render_el(area, eventos, el, font)
 

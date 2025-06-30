@@ -11,7 +11,8 @@ estado = {
         "acertadas": [],
         "palabras_validadas": [],
         "pistas": [],
-        "juego_ganado": False
+        "juego_ganado": False,
+        "nombre_jugador": ""
     },
     "listeners": []
 }

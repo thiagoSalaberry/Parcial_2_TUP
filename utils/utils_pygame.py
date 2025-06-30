@@ -2,12 +2,18 @@ import pygame
 from estado import get_estado, set_estado
 from eventos import on, trigger
 from componentes.boton import *
-
+from funciones import leer_estadisticas, cargar_estadisticas
 from constantes import ARCH_NIVELES
 import json
 import os
 
-def ingresar_letra(letra: str) -> None:
+
+# def cargar_nombre(letra: str) -> None:
+#     nombre_jugador = get_estado("nombre_jugador")
+
+
+
+def ingresar_letra(letra: str, campo: str) -> None:
     i_palabra_actual = get_estado("i_palabra_actual")
     palabras_completadas = get_estado("palabras_completadas")
     nivel_actual = get_estado("nivel_actual")
@@ -18,29 +24,40 @@ def ingresar_letra(letra: str) -> None:
         largo_palabras = 8
     elif nivel_actual == "dificil":
         largo_palabras = 10
-    palabra_actual = palabras_completadas[i_palabra_actual]
+    
+    if campo == "palabra_actual":
+        palabra_actual = palabras_completadas[i_palabra_actual]
 
-    if len(palabra_actual) < largo_palabras:
-        palabra_actual += letra
+        if len(palabra_actual) < largo_palabras:
+            palabra_actual += letra
+            palabras_completadas[i_palabra_actual] = palabra_actual
+            set_estado({
+                "palabras_completadas": palabras_completadas,
+                "palabra_actual": palabra_actual
+            })
+            verificar_palabra()
+            nivel_terminado()
+            juego_terminado()
+    elif campo == "nombre_jugador":
+        nombre_jugador = get_estado("nombre_jugador")
+        nombre_jugador += letra
+        set_estado({"nombre_jugador": nombre_jugador})
+
+
+def borrar_letra(campo: str) -> None:
+    if campo == "palabra_actual":
+        i_palabra_actual = get_estado("i_palabra_actual")
+        palabras_completadas = get_estado("palabras_completadas")
+        palabra_actual = get_estado("palabras_completadas")[i_palabra_actual][:-1]
         palabras_completadas[i_palabra_actual] = palabra_actual
         set_estado({
             "palabras_completadas": palabras_completadas,
-            "palabra_actual": palabra_actual
+            "palabra_actual": palabra_actual,
         })
-        verificar_palabra()
-        nivel_terminado()
-        juego_terminado()
-
-
-def borrar_letra() -> None:
-    i_palabra_actual = get_estado("i_palabra_actual")
-    palabras_completadas = get_estado("palabras_completadas")
-    palabra_actual = get_estado("palabras_completadas")[i_palabra_actual][:-1]
-    palabras_completadas[i_palabra_actual] = palabra_actual
-    set_estado({
-        "palabras_completadas": palabras_completadas,
-        "palabra_actual": palabra_actual,
-    })
+    elif campo == "nombre_jugador":
+        nombre_jugador = get_estado("nombre_jugador")
+        nombre_jugador = nombre_jugador[:-1]
+        set_estado({"nombre_jugador": nombre_jugador})
 
 
 def siguiente() -> None:
@@ -76,6 +93,7 @@ def handle_win_level() -> None:
 
 def handle_win_game() -> None:
     print("¡🎉 FELICIDADES, GANASTE EL JUEGO!")
+
     set_estado({ "juego_ganado": True })
     sound("ganar")
 
@@ -147,6 +165,26 @@ def cambiar_pantalla(pantalla: str) -> None:
         raise ValueError("'pantalla' debe ser 'inicio', 'jugar', 'estadisticas' o 'creditos'.")
 
     set_estado({"pantalla": pantalla})
+
+
+def volver() -> None:
+    data_niveles = leer_niveles()
+    estado_inical = {
+        "pantalla": "inicio",
+        "nivel_actual": "facil",
+        "estado_nivel_actual": "jugando",
+        "palabras": data_niveles["facil"]["palabras"],
+        "palabras_validadas": [False] * 8,
+        "palabras_completadas": [""] * 8,
+        "acertadas": [False] * 8,
+        "pistas": data_niveles["facil"]["pistas"],
+        "score": 0,
+        "i_palabra_actual": 0,
+        "palabra_actual": "",
+        "juego_ganado": False,
+        "nombre_jugador": ""
+    }
+    set_estado(estado_inical)
 
 
 def leer_niveles(arch_niveles: str = ARCH_NIVELES) -> dict:
