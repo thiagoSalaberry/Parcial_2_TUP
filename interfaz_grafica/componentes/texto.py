@@ -1,7 +1,7 @@
 import pygame
 from pygame.font import Font
 from pygame import Surface
-from constantes import COLOR_TEXTO
+from consola.constantes import COLOR_TEXTO
 
 texto_el_modelo = {
     "tipo": "texto",

@@ -4,12 +4,12 @@ import sys
 from estado import get_estado, set_estado
 from render import *
 from eventos import on
-from interfaz_grafica.utils_pygame import handle_level_change
+from utils_pygame import cambiar_nivel, ganar_nivel, ganar_juego, manejar_puntos
 from ui.boton import *
 from ui.recuadro import *
 from ui.input import *
-from consola.funciones import leer_estadisticas
-from .constantes import ARCH_ESTAD as arch_estad
+from funciones import leer_estadisticas
+from consola.constantes import ARCH_ESTAD as arch_estad
 
 
 def main() -> None:
@@ -45,13 +45,13 @@ def main() -> None:
     data_niveles = leer_niveles()
     set_estado({
         "pantalla": "inicio",
-        "nivel_actual": "dificil",
+        "nivel_actual": "facil",
         "estado_nivel_actual": "jugando",
-        "palabras": data_niveles["dificil"]["palabras"],
+        "palabras": data_niveles["facil"]["palabras"],
         "palabras_validadas": [False] * 8,
         "palabras_completadas": [""] * 8,
         "acertadas": [False] * 8,
-        "pistas": data_niveles["dificil"]["pistas"],
+        "pistas": data_niveles["facil"]["pistas"],
     })   
 
     def cargar_estadisticas() -> None:
@@ -94,10 +94,10 @@ def main() -> None:
 
 
     # Cargamos los eventos
-    on("palabra_completada", handle_points)
-    on("nivel_ganado", handle_win_level)
-    on("cambio_de_nivel", handle_level_change)
-    on("juego_ganado", handle_win_game)
+    on("palabra_completada", manejar_puntos)
+    on("nivel_ganado", ganar_nivel)
+    on("cambio_de_nivel", cambiar_nivel)
+    on("juego_ganado", ganar_juego)
     on("nombre_cargado", cargar_estadisticas)  
 
 
@@ -105,7 +105,6 @@ def main() -> None:
     while ejecutando:
         # 👇 Acá manejamos los eventos de teclado y mouse
         events = pygame.event.get()
-        render_el(screen, events, {"tipo": "asd"})
         for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()

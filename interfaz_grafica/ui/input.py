@@ -1,7 +1,7 @@
 import pygame
 from pygame.font import Font
 from pygame.event import Event
-from constantes import COLOR_LETRA_ACTIVO, COLOR_LETRA_ACTIVO_SOMBRA
+from consola.constantes import COLOR_LETRA_ACTIVO, COLOR_LETRA_ACTIVO_SOMBRA
 def crear_input(texto: str, font: Font) -> dict:
     if font is None:
         font = pygame.font.SysFont(None, 24)

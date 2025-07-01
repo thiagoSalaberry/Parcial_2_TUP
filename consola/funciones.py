@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from constantes import *
+from consola.constantes import *
 
 
 def jugar():
