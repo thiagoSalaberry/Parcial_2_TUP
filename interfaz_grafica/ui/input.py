@@ -29,9 +29,9 @@ def wrap_input(texto_dict: dict, font: Font) -> dict:
         data["rect"].topleft = pos
         data["rect_sombra"].topleft = (pos[0], pos[1] + 4)
 
-        fondo = (2, 18, 35)  # azul
-        sombra = COLOR_LETRA_ACTIVO_SOMBRA  # amarillo
-        borde_color = COLOR_LETRA_ACTIVO  # amarillo
+        fondo = (2, 18, 35)
+        sombra = COLOR_LETRA_ACTIVO_SOMBRA
+        borde_color = COLOR_LETRA_ACTIVO
         borde_width = 2
 
         pygame.draw.rect(area, sombra, data["rect_sombra"])

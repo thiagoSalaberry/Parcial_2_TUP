@@ -40,7 +40,7 @@ def wrap_recuadro(
 
         pygame.draw.rect(area, COLOR_LETRA_CORRECTO, rect, width=2)
 
-        # Renderizar los elementos dentro, justificados según parámetro
+        # Renderizamos los elementos adentro, justificados según parámetro
         if direccion == "vertical":
             y = rect.top + padding_y
             for elem in elementos:

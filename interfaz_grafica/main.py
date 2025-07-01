@@ -93,7 +93,7 @@ def main() -> None:
         pantalla = get_estado("pantalla")
         if pantalla != "inicio":
             overlay = pygame.Surface((ANCHO, ALTO), pygame.SRCALPHA)
-            overlay.fill((0, 0, 0, 128))  # 128 = 0.5 de opacidad
+            overlay.fill((0, 0, 0, 128))
 
             screen.blit(overlay, (0, 0))
 

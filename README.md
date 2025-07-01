@@ -17,6 +17,9 @@ Período de desarrollo de Junio de 2025 al 1 de Julio de 2025
 Desarrollamos el famoso juego **CODY CROSS** en Python para ser jugado a través de una terminal de Bash o de una interfaz gráfica usando la biblioteca pygame.
 Utilizamos el concepto de estado y de eventos en la versión de interfaz gráfica para poder ir renderizando las pantallas y los elementos en consecuencia. También buscamos una manera de reutilizar los componentes UI mediante funciones.
 
+## ⚠️ Consejos
+Se recomienda leer los comentarios del módulo /interfaz_grafica/ui/__init__.py, los comentarios de las funciones del módulo /interfaz_grafica/ui/boton.py, /interfaz_grafica/ui/recuadro.py y /interfaz_grafica/render_funcs.py función grupo()
+
 ## 🏗️ Estructura del Proyecto
 El proyecto fue estructurado de la siguiente manera: <br/>
 📂 Segundo_Parcial_Grupo_05 <br/>

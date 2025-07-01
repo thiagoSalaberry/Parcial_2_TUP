@@ -34,7 +34,7 @@ MENSAJE_DE_CREDITOS = f"""{"─" * sum("Créditos")}
 
 Autores:
     ▫️ {negrita("Bautista Ruiz")}
-    ▫️ {negrita("Thiago Salaberryz")}
+    ▫️ {negrita("Thiago Salaberry")}
 Fecha de Desarrollo: {negrita("Junio 2025")}
 Materia: {negrita("Programación I")}
 Docente: {negrita("Prof. Martín Alejandro García y Verónica Natalia Carbonari")}
