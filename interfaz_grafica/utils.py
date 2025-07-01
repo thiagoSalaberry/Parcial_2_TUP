@@ -1,3 +1,6 @@
+"""
+Este módulo se encarga de la lógica de lectura y escritura de los archivos
+"""
 import json
 from constantes import ARCH_NIVELES, ARCH_ESTAD
 from estado import get_estado, set_estado
@@ -17,7 +20,14 @@ def leer_niveles(arch_niveles: str = ARCH_NIVELES) -> dict:
     return datos_niveles["niveles"]
 
 
-def leer_estadisticas(arch_estad: str = ARCH_ESTAD, print: bool = True) -> list[str]:
+def leer_estadisticas(arch_estad: str = ARCH_ESTAD) -> list[str]:
+    """
+    Lee el archivo de las estadísticas de los jugadores
+    Args:
+        arch_estad (str): Ruta al archivo de estadísticas
+    Returns:
+        estadisticas (list[str]): Lista de cada uno de los registros
+    """
     with open(arch_estad, "r") as file:
         lineas = file.readlines()
 
@@ -27,8 +37,13 @@ def leer_estadisticas(arch_estad: str = ARCH_ESTAD, print: bool = True) -> list[
 
 
 def cargar_estadisticas(arch_estad: str = ARCH_ESTAD) -> None:
+    """
+    Actualiza el archivo de estadísticas y reinicia el estado.
+    Args:
+        arch_estad (str): Ruta al archivo de estadísticas
+    """
     score = get_estado("score")
-    estadisticas = leer_estadisticas(print=False)
+    estadisticas = leer_estadisticas()
     puntajes = [int(linea.split(" - ")[1]) for linea in estadisticas]
     nombre_jugador = get_estado("nombre_jugador")
 
@@ -38,7 +53,7 @@ def cargar_estadisticas(arch_estad: str = ARCH_ESTAD) -> None:
         return
 
     if not puntajes or len(puntajes) < 10 or (len(puntajes) == 10 and score > puntajes[-1]):
-        estadisticas: list[str] = leer_estadisticas(print=False)
+        estadisticas: list[str] = leer_estadisticas()
 
         estadisticas.append(f"{nombre_jugador} - {score}")
         estadisticas.sort(key=lambda x: int(x.split(" - ")[1]), reverse=True)

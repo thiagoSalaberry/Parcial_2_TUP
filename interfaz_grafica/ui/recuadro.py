@@ -6,13 +6,17 @@ def wrap_recuadro(
     elementos: list[dict],
     padding: tuple[int, int] = (40, 20),
     gap: int = 20,
-    direccion: str = "vertical",  # o "horizontal"
+    direccion: str = "vertical",
     jusfify: str = "center",
     font: pygame.font.Font = None
 ) -> dict:
+    """
+    Esta función sirve para crear elementos como contenedores que simular el comportamiento de un elemento
+    HTML div display flex que agrupen elementos hijos dentro de él
+    """
     padding_x, padding_y = padding
 
-    # Calculamos dimensiones internas del contenido
+    # Calculamos las dimensiones internas del contenido
     if direccion == "vertical":
         ancho_contenido = max(e["ancho"] for e in elementos)
         alto_contenido = sum(e["alto"] for e in elementos) + gap * (len(elementos) - 1)
@@ -30,19 +34,13 @@ def wrap_recuadro(
         rect.topleft = pos
         sombra_rect.topleft = (pos[0], pos[1] + 4)
 
-        # Dibujar sombra
-        # pygame.draw.rect(area, COLOR_LETRA_CORRECTO_SOMBRA, sombra_rect)
-
-        # Dibujar fondo del recuadro
-        # pygame.draw.rect(area, (2, 18, 35), rect)  # Azul oscuro
         rect_transparente = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
         pygame.draw.rect(rect_transparente, (2, 18, 35, 128), rect_transparente.get_rect(), border_radius=10)
         area.blit(rect_transparente, rect.topleft)
 
-        # Dibujar borde
-        pygame.draw.rect(area, COLOR_LETRA_CORRECTO, rect, width=2)  # Amarillo
+        pygame.draw.rect(area, COLOR_LETRA_CORRECTO, rect, width=2)
 
-        # Renderizar los elementos dentro, centrados
+        # Renderizar los elementos dentro, justificados según parámetro
         if direccion == "vertical":
             y = rect.top + padding_y
             for elem in elementos:

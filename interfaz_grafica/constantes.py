@@ -7,11 +7,13 @@ ARCH_ESTAD = os.path.join(RUTA_DATA, "estadisticas.txt")
 APP_PATH = os.path.dirname(os.path.realpath(__file__))
 ASSETS_PATH = os.path.join(APP_PATH, "assets")
 
+# 🔢 Valores
+ANCHO = 800
+ALTO = 600
+
 # 🔴🔵🟢🟡 Colores
-COLOR_TEXTO = (252, 255, 46)
 COLOR_BOTON = (27, 36, 201)
 COLOR_BOTON_SOMBRA = (181, 139, 0)
-COLOR_TEXTO = (2, 28, 40)
 COLOR_TEXTO = (240, 238, 233)
 COLOR_BOTON = (255, 209, 56)
 COLOR_LETRA_CORRECTO=(255, 209, 56)
@@ -31,7 +33,7 @@ pant_creditos = [
     { "tipo": "texto",  "valor": "CRÉDITOS", "pos": (400, 45) },
     { "tipo": "texto",  "valor": "Autores:", "pos": (400, 75) },
     { "tipo": "texto",  "valor": "  -   Bautista Ruiz", "pos": (400, 105) },
-    { "tipo": "texto",  "valor": "  -   Thiago Salaberryz", "pos": (400, 125) },
+    { "tipo": "texto",  "valor": "  -   Thiago Salaberry", "pos": (400, 125) },
     { "tipo": "texto",  "valor": "Fecha de Desarrollo:", "pos": (400, 165) },
     { "tipo": "texto",  "valor": "  -   Junio 2025", "pos": (400, 195) },
     { "tipo": "texto",  "valor": "Materia:", "pos": (400, 235) },

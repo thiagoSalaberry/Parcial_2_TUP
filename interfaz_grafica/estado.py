@@ -1,3 +1,6 @@
+"""
+Este módulo se encarga de manejar el estado central. Decidimos no usar los listeners y en su lugar usar los eventos
+"""
 estado = {
     "data": {
         "pantalla": "",

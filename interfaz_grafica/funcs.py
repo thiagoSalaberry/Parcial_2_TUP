@@ -1,3 +1,6 @@
+"""
+Este módulo se encarga de manejar toda la lógica relativa al juego
+"""
 import os
 import pygame
 from estado import get_estado, set_estado
@@ -15,8 +18,6 @@ def ingresar_letra(letra: str, campo: str) -> None:
     Args:
         letra (str): Caracter ingresada por el usuario
         campo (str): Campo del estado a alterar
-    Returns:
-        None
     """
 
     if campo == "palabra_actual":
@@ -55,8 +56,6 @@ def borrar_letra(campo: str) -> None:
     Borra la última letra en el campo del estado pertinente
     Args:
         campo (str): Campo del estado a alterar
-    Returns:
-        None
     """
     if campo == "palabra_actual":
         i_palabra_actual, palabras_completadas, palabra_actual = get_estado("i_palabra_actual"), get_estado("palabras_completadas"), get_estado("palabras_completadas")
@@ -75,27 +74,23 @@ def borrar_letra(campo: str) -> None:
 def siguiente() -> None:
     """
     Pasa a la siguiente palabra disponible para cargar en la fase del juego. Evalúa si la siguiente palabra disponible está hacia adelante o hacia atrás y saltea las que hayan sido cargadas correctamente.
-    Args:
-        None
-    Returns:
-        None
     """
     acertadas, i_palabra_actual = get_estado("acertadas"), get_estado("i_palabra_actual")
     total = len(acertadas)
 
-    # Buscar hacia adelante
+    # Buscamos hacia adelante
     for i in range(i_palabra_actual + 1, total):
         if not acertadas[i]:
             set_estado({ "i_palabra_actual": i })
             return
 
-    # Buscar desde el principio hasta la actual
+    # Buscamos desde el principio hasta la actual
     for i in range(0, i_palabra_actual):
         if not acertadas[i]:
             set_estado({ "i_palabra_actual": i })
             return
 
-    # Todas acertadas
+    # Todas las palabras fueron acertadas
     return None
 
 
@@ -104,8 +99,6 @@ def cambiar_palabra(i: int) -> None:
     Pasa a la palabra clickeada por el mouse en caso de que no haya sido completada.
     Args:
         i (int): Índice de la palabra
-    Returns:
-        None
     """
     acertadas = get_estado("acertadas")
     if acertadas[i]:
@@ -116,10 +109,6 @@ def cambiar_palabra(i: int) -> None:
 def verificar_palabra():
     """
     Verifica que la palabra actual ingresada por el usuario se igual a la determinada por el juego. En tal caso, dispara el evento de 'palabra_completada'
-    Args:
-        None
-    Returns:
-        None
     """
     palabra_actual, palabras = get_estado("palabra_actual"), get_estado("palabras")
     if len(palabra_actual) == len(palabras[0]):

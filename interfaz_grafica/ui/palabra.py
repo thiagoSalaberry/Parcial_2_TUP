@@ -61,27 +61,23 @@ def wrap_letra(letra_dict: dict, font: Font) -> dict:
             borde_color = None
             borde_width = None
         elif data["activo"]:
-            fondo = (2, 18, 35)  # azul
-            sombra = COLOR_LETRA_ACTIVO_SOMBRA  # amarillo
-            borde_color = COLOR_LETRA_ACTIVO  # amarillo
+            fondo = (2, 18, 35)
+            sombra = COLOR_LETRA_ACTIVO_SOMBRA
+            borde_color = COLOR_LETRA_ACTIVO
             borde_width = 2
         else:
-            fondo = (2, 18, 35)  # azul
-            sombra = (124, 124, 124)  # sombra gris más oscura
-            borde_color = (212, 212, 212)  # borde gris
+            fondo = (2, 18, 35)
+            sombra = (124, 124, 124)
+            borde_color = (212, 212, 212)
             borde_width = 2
 
-        # Dibujar sombra
         pygame.draw.rect(area, sombra, data["rect_sombra"], border_radius=5)
 
-        # Dibujar fondo
         pygame.draw.rect(area, fondo, data["rect"], border_radius=5)
 
-        # Dibujar borde si corresponde
         if borde_color and borde_width > 0:
             pygame.draw.rect(area, borde_color, data["rect"], border_radius=5, width=borde_width)
 
-        # Dibujar letra centrada
         area.blit(
             data["area_letra"],
             (
@@ -112,7 +108,7 @@ def crear_palabra(
 
     for j, letra_correcta in enumerate(correcta):
         letra_ingresada = ingresada[j] if j < len(ingresada) else ""
-        activo = i_palabra_actual == i # and j == len(ingresada)
+        activo = i_palabra_actual == i
 
         if letra_ingresada and letra_ingresada == letra_correcta:
             estado_letra = "bien"
