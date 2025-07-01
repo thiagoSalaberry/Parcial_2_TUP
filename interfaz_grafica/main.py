@@ -14,7 +14,7 @@ def main() -> None:
     Punto de entrada del juego.
     Define las variables principales, inicializa el estado central, carga los eventos, maneja las entradas del teclado y el mouse y renderiza las pantallas según el estado.
     """
-    os.system("cls")
+    os.system("cls" if os.name == "nt" else "clear")
     pygame.init()
     pygame.mixer.init()
    

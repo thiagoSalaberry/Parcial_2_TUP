@@ -1,4 +1,4 @@
-from .utils import negrita
+from utils import negrita
 
 
 margen = 10

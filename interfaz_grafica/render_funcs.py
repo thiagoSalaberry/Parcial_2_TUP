@@ -169,6 +169,8 @@ def render_pantalla(
                 wrappeables.append(wrap_texto({"valor": el["valor"]}, font))
         for i, jugador in enumerate(estadisticas):
             wrappeables.append(wrap_texto({"valor": f"{i + 1}. {jugador}"}, font))
+        if not wrappeables:
+            wrappeables = [wrap_texto({"valor": "Aún no hay estadísticas cargadas"}, font)]
         recuadro = wrap_recuadro(wrappeables, padding=(40, 20), gap=10, direccion="vertical", jusfify="left", font=font)
         # Centramos el recuadro en pantalla
         x = (ANCHO - recuadro["ancho"]) // 2
