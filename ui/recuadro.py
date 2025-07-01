@@ -8,6 +8,7 @@ def wrap_recuadro(
     padding: tuple[int, int] = (40, 20),
     gap: int = 20,
     direccion: str = "vertical",  # o "horizontal"
+    jusfify: str = "center",
     font: pygame.font.Font = None
 ) -> dict:
     padding_x, padding_y = padding
@@ -46,7 +47,12 @@ def wrap_recuadro(
         if direccion == "vertical":
             y = rect.top + padding_y
             for elem in elementos:
-                x = rect.left + (ancho_total - elem["ancho"]) // 2
+                if jusfify == "center":
+                    x = rect.left + (ancho_total - elem["ancho"]) // 2
+                elif jusfify == "left":
+                    x = rect.left + padding_x
+                elif jusfify == "right":
+                    x = rect.left + ancho_total - elem["ancho"] - padding_x
                 elem["render"](area, (x, y), eventos)
                 y += elem["alto"] + gap
         else:
