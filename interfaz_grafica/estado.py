@@ -19,6 +19,13 @@ estado = {
 
 
 def get_estado(campo: str = None) -> dict:
+    """
+    Devuelve la información del estado central.
+    Args:
+        campo (str): Nombre de la clave a devolver. Si no se pasa, devuelve el estado completo
+    Returns:
+        data (dict): La clave solicitada o el estado completo
+    """
     if campo:
         if campo not in estado["data"]:
             print(f"⚠️  El campo {campo} no pertenece al estado")
@@ -27,6 +34,13 @@ def get_estado(campo: str = None) -> dict:
 
 
 def set_estado(nuevos_valores: dict) -> None:
+    """
+    Actualiza el estado completo o las claves pasadas.
+    Args:
+        nuevos_valores (dict): El nuevo mapeo de las claves del estado
+    Returns:
+        None
+    """
     cambios = False
     for campo, valor in nuevos_valores.items():
         if campo not in estado["data"]:

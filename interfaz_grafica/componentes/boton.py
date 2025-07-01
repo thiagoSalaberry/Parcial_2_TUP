@@ -2,7 +2,7 @@ import pygame
 from pygame.font import Font
 from constantes import COLOR_TEXTO, COLOR_BOTON, COLOR_BOTON_SOMBRA
 from pygame import Surface
-from estado import get_estado
+from interfaz_grafica.estado import get_estado
 
 def crear_boton(
     x: int,

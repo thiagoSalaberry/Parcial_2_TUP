@@ -3,7 +3,7 @@ from pygame.font import Font
 from pygame import Surface
 from constantes import COLOR_TEXTO
 from componentes.input import crear_input, render_input, manejar_click_input
-from estado import estado, set_estado, get_estado
+from interfaz_grafica.estado import estado, set_estado, get_estado
 
 
 def ir_a_palabra(i: int) -> None:

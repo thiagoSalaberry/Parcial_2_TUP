@@ -1,4 +1,4 @@
-from funciones import *
+from consola.funciones import *
 
 def main() -> None:
     eleccion = menu()

@@ -4,14 +4,24 @@ import sys
 from estado import get_estado, set_estado
 from render import *
 from eventos import on
-from utils.utils_pygame import handle_level_change
+from interfaz_grafica.utils_pygame import handle_level_change
 from ui.boton import *
 from ui.recuadro import *
 from ui.input import *
-from funciones import leer_estadisticas
-from constantes import ARCH_ESTAD as arch_estad
+from consola.funciones import leer_estadisticas
+from .constantes import ARCH_ESTAD as arch_estad
+
+
 def main() -> None:
-    # os.system("cls")
+    """
+    Punto de entrada del juego.
+    Define las variables principales, inicializa el estado central, carga los eventos, maneja las entradas del teclado y el mouse y renderiza las pantallas según el estado.
+    Args:
+        None
+    Returns:
+        None
+    """
+    os.system("cls")
     pygame.init()
     pygame.mixer.init()
    
@@ -30,6 +40,7 @@ def main() -> None:
     fondo = pygame.image.load("assets/fondo.png").convert()
     fondo = pygame.transform.scale(fondo, screen.get_size())
 
+    
     # Inicializamos el estado
     data_niveles = leer_niveles()
     set_estado({
@@ -62,6 +73,8 @@ def main() -> None:
             
         else:
             print("😞 NO entraste en el top 10")
+
+
         estado_inical = {
             "pantalla": "estadisticas",
             "nivel_actual": "facil",
@@ -78,6 +91,8 @@ def main() -> None:
             "nombre_jugador": ""
         }
         set_estado(estado_inical)
+
+
     # Cargamos los eventos
     on("palabra_completada", handle_points)
     on("nivel_ganado", handle_win_level)
@@ -85,11 +100,12 @@ def main() -> None:
     on("juego_ganado", handle_win_game)
     on("nombre_cargado", cargar_estadisticas)  
 
+
     # Bucle principal del juego
-    abc = "abcdefghijklmnñopqrstuvwxyz"
     while ejecutando:
         # 👇 Acá manejamos los eventos de teclado y mouse
         events = pygame.event.get()
+        render_el(screen, events, {"tipo": "asd"})
         for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -117,30 +133,21 @@ def main() -> None:
                                 ingresar_letra(code.upper(), "palabra_actual")
 
 
+        # Renderizamos la imagen de fondo
         screen.blit(fondo, (0, 0))
-        pantalla, juego_ganado = get_estado("pantalla"), get_estado("juego_ganado")
+
+
+        # Agregamos un overlay transparente para mayor claridad durante el juego
+        pantalla = get_estado("pantalla")
         if pantalla != "inicio":
             overlay = pygame.Surface((ancho, alto), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 128))  # 128 = 0.5 de opacidad
 
-            # Blittear la capa encima del fondo
             screen.blit(overlay, (0, 0))
+
+
+        # Esta es la función que se encarga de renderizar cada una de las pantallas
         render_pantalla(screen, events, font)
-        # if juego_ganado and pantalla == "jugar":
-        #     elementos = [
-        #         wrap_texto({"valor": "¡FELICITACIONES!"}, font),
-        #         wrap_texto({"valor": f"Ganaste el juego con {get_estado("score")} puntos"}, font),
-        #         wrap_texto({"valor": "Ingresá tu nombre:"}, font),
-        #         wrap_input({"valor": get_estado("nombre_jugador")}, font),
-        #         wrap_boton({"valor": "Cargar puntos", "callback": lambda: trigger("nombre_cargado")}, font)
-        #     ]
-
-        #     recuadro = wrap_recuadro(elementos, padding=(40, 20), gap=20, direccion="vertical", font=font)
-
-        #     # Centramos el recuadro en pantalla
-        #     x = (ancho - recuadro["ancho"]) // 2
-        #     y = (alto - recuadro["alto"]) // 2
-        #     recuadro["render"](screen, (x, y), events)
         
         pygame.display.flip()
         clock.tick(60)

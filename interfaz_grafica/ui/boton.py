@@ -4,7 +4,7 @@ from pygame.event import Event
 from componentes.boton import manejar_click_boton, crear_boton
 from componentes.input import manejar_click_input
 from constantes import COLOR_BOTON, COLOR_BOTON_SOMBRA, COLOR_TEXTO, COLOR_LETRA_CORRECTO_SOMBRA, COLOR_LETRA_ACTIVO, COLOR_LETRA_ACTIVO_SOMBRA, COLOR_LETRA_CORRECTO, COLOR_LETRA_DEFAULT, COLOR_LETRA_DEFAULT_SOMBRA, COLOR_LETRA_INCORRECTO, COLOR_LETRA_INCORRECTO_SOMBRA
-from utils.utils_pygame import grupo
+from interfaz_grafica.utils_pygame import grupo
 # def crear_boton(x: int, y: int, texto: str, callback: callable, font: Font) -> dict:
 #     pass
 

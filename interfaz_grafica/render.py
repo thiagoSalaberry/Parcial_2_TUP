@@ -1,26 +1,32 @@
 import pygame
 from pygame import Surface
 from pygame.font import Font
-from constantes import COLOR_TEXTO, COLOR_BOTON
-from componentes.boton import crear_boton, boton as button, manejar_click_boton
-from utils.utils_pygame import cambiar_pantalla, leer_niveles
+from componentes.boton import boton as button
+from interfaz_grafica.utils_pygame import leer_niveles
 from componentes.texto import *
-from componentes.input import crear_input, render_input, manejar_click_input
-from estado import get_estado, set_estado
+from interfaz_grafica.estado import get_estado, set_estado
 from componentes.palabra import palabra
-from utils.utils_pygame import *
-from pantallas import pant_inicio, pant_jugar, pant_estadisticas, pant_creditos
-from ui.boton import wrap_palabra, wrap_boton, wrap_letra, wrap_texto
+from interfaz_grafica.utils_pygame import *
+from interfaz_grafica.pantallas import pant_estadisticas, pant_creditos
+from ui.boton import wrap_palabra, wrap_boton, wrap_texto
 from ui.input import wrap_input
 from ui.recuadro import wrap_recuadro
-from funciones import leer_estadisticas
+from consola.funciones import leer_estadisticas
 import sys
 
-times = 0
+
 data_niveles = leer_niveles()
 
 
 def render_el(area: Surface, eventos: list[pygame.event.Event], el: dict, font: Font) -> None:
+    """
+    Renderiza un elemento según su tipo.
+    Args:
+        area (Surface): Superfici de pygame sobre la cual renderizar los elementos
+        eventos (list[pygame.event.Event]): Lista de eventos a pasar a cada uno de los elementos que los necesiten
+        el (dict): Elemento a renderizar
+        font (Font): Fuente con la que renderizar los textos
+    """
     match el["tipo"]:
         case "texto":
             texto(area, el, font)
@@ -28,6 +34,9 @@ def render_el(area: Surface, eventos: list[pygame.event.Event], el: dict, font: 
             button(area, el, eventos, font)
         case "palabra":
             palabra(area, eventos, el)
+        case "*":
+            raise("⚠️  El elemento a renderizar es de un tipo no soportado")
+            
 
 
 def render_pantalla(
