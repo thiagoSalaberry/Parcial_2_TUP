@@ -1,5 +1,4 @@
 import os
-import pygame
 from utils import negrita
 
 RUTA_DATA = "data"
@@ -9,8 +8,9 @@ ARCH_ESTAD = os.path.join(RUTA_DATA, "estadisticas.txt")
 margen = 10
 
 # font = pygame.font.Font("assets/font.ttf", 24)
-COLOR_TEXTO = (255, 255, 255)
-COLOR_BOTON = (50, 50, 50)
+COLOR_TEXTO = (252, 255, 46)
+COLOR_BOTON = (27, 36, 201)
+COLOR_BOTON_SOMBRA = (181, 139, 0)
 def sum(largo: int) -> int:
     return len(largo) + margen * 2 + 1 if (len(largo) + margen * 2) % 2 == 0 else len(largo) + margen * 2
 
@@ -50,3 +50,14 @@ MENSAJE_DE_SALIDA = f"¡Gracias por jugar a {negrita("CODY CROSS")}!\n¡Hasta la
 
 # font = pygame.font.Font("assets/font.ttf", 24)
 color = (203, 219,  208)
+COLOR_TEXTO = (2, 28, 40)
+COLOR_TEXTO = (240, 238, 233)
+COLOR_BOTON = (255, 209, 56)
+COLOR_LETRA_CORRECTO=(255, 209, 56)
+COLOR_LETRA_CORRECTO_SOMBRA=(181, 139, 0)
+COLOR_LETRA_INCORRECTO=(255, 56, 56)
+COLOR_LETRA_INCORRECTO_SOMBRA=(181, 0, 0)
+COLOR_LETRA_ACTIVO=COLOR_LETRA_CORRECTO
+COLOR_LETRA_ACTIVO_SOMBRA=COLOR_LETRA_CORRECTO_SOMBRA
+COLOR_LETRA_DEFAULT=(212, 212, 212)
+COLOR_LETRA_DEFAULT_SOMBRA=(93, 96, 100)

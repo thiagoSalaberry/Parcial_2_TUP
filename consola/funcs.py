@@ -2,7 +2,7 @@ import os
 import sys
 import json
 from constantes import *
-from utils import negrita
+
 
 def jugar():
     niveles = ["facil", "intermedio", "dificil"]
@@ -15,6 +15,7 @@ def jugar():
     print("¡🎉 Felicitaciones, ganaste el juego!")
 
     en_mejores_10 = cargar_estadisticas(puntos=puntos)
+    leer_estadisticas(print_stats=True)
     if en_mejores_10:
         print("🎖️ Ingresaste al ranking de los mejores 10")
 
@@ -89,41 +90,45 @@ def creditos():
     """
     print(MENSAJE_DE_CREDITOS)
 
-def cargar_estadisticas(puntos: int, arch_estad: str = ARCH_ESTAD) -> None:
+def cargar_estadisticas(puntos: int, arch_estad: str = ARCH_ESTAD) -> bool:
     """
     Carga el nombre y los puntos del jugador en un archivo .txt
     """
+
     nombre_completo = input("Ingresá tu nombre completo: ")[:12].strip()
 
-    estadisticas: list[str] = leer_estadisticas()
+    estadisticas: list[str] = leer_estadisticas(print_stats=False)
+    puntajes = [int(linea.split(" - ")[1]) for linea in estadisticas]
 
-    estadisticas.append(f"{nombre_completo} - {puntos}")
-    estadisticas.sort(key=lambda x: int(x.split(" - ")[1]), reverse=True)
+    if not puntajes or len(puntajes) < 10 or (len(puntajes) == 10 and puntos > puntajes[-1]):
+        estadisticas.append(f"{nombre_completo} - {puntos}")
+        estadisticas.sort(key=lambda x: int(x.split(" - ")[1]), reverse=True)
 
-    with open(arch_estad, "w") as file:
-        file.writelines([f"{linea}\n" for linea in estadisticas][:10])
-    
+        with open(arch_estad, "w") as file:
+            file.writelines([f"{linea}\n" for linea in estadisticas][:10])
+        
+        return True
+    else:
+        return False
 
-
-def leer_estadisticas(arch_estad: str = ARCH_ESTAD) -> list[str]:
+def leer_estadisticas(arch_estad: str = ARCH_ESTAD, print_stats: bool = True) -> list[str]:
     with open(arch_estad, "r") as file:
         lineas = file.readlines()
 
     estadisticas = [linea.replace("\n", "") for linea in lineas]
     
-    # titulo = "🏅 Mejores 10 Jugadores 🏅"
-    # print("-" * (len(titulo) + 12) + "\n" + " " * 5 + titulo + " " * 5 + "\n" + "-" * (len(titulo) + 12))
-    print(MENSAJE_DE_ESTADISTICAS)
-    for i, jugador in enumerate(estadisticas):
-        nombre, puntos = jugador.split(" - ")
-        if i == 0:
-            print(f"🥇 - {nombre}: {puntos}")
-        elif i == 1:
-            print(f"🥈 - {nombre}: {puntos}")
-        elif i == 2:
-            print(f"🥉 - {nombre}: {puntos}")
-        else:
-            print(f" {i + 1} - {nombre}: {puntos}")
+    if print_stats:
+        print(MENSAJE_DE_ESTADISTICAS)
+        for i, jugador in enumerate(estadisticas):
+            nombre, puntos = jugador.split(" - ")
+            if i == 0:
+                print(f"🥇 - {nombre}: {puntos}")
+            elif i == 1:
+                print(f"🥈 - {nombre}: {puntos}")
+            elif i == 2:
+                print(f"🥉 - {nombre}: {puntos}")
+            else:
+                print(f" {i + 1} - {nombre}: {puntos}")
 
     return estadisticas
 
