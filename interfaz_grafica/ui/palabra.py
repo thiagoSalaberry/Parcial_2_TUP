@@ -1,12 +1,10 @@
 import pygame
-from pygame import Surface
 from pygame.font import Font
 from pygame.event import Event
-from componentes.boton import manejar_click_boton, crear_boton
-from componentes.input import manejar_click_input
-from consola.constantes import COLOR_BOTON, COLOR_BOTON_SOMBRA, COLOR_TEXTO, COLOR_LETRA_CORRECTO_SOMBRA, COLOR_LETRA_ACTIVO, COLOR_LETRA_ACTIVO_SOMBRA, COLOR_LETRA_CORRECTO, COLOR_LETRA_DEFAULT, COLOR_LETRA_DEFAULT_SOMBRA, COLOR_LETRA_INCORRECTO, COLOR_LETRA_INCORRECTO_SOMBRA
-from texto import wrap_texto
-from funciones import grupo
+from constantes import COLOR_LETRA_CORRECTO_SOMBRA, COLOR_LETRA_ACTIVO, COLOR_LETRA_ACTIVO_SOMBRA, COLOR_LETRA_CORRECTO, COLOR_LETRA_INCORRECTO, COLOR_LETRA_INCORRECTO_SOMBRA
+from ui.input import manejar_click_input
+from ui.texto import wrap_texto
+
 
 def crear_letra(letra: str, activo: bool, estado_palabra: str, estado_letra: str, i: int, callback: callable, font: Font) -> dict:
     if font is None:
@@ -144,7 +142,7 @@ def wrap_palabra(
     font: Font
 ) -> dict:
     letras = crear_palabra(correcta, ingresada, i, i_palabra_actual, callback, font)
-
+    from render_funcs import grupo
     def render(area: pygame.Surface, pos: tuple[int, int], eventos: list[Event]) -> None:
         grupo(letras, "horizontal", 10, pos, area, eventos)
     

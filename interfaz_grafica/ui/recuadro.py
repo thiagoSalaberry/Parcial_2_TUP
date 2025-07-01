@@ -1,5 +1,7 @@
 import pygame
-from consola.constantes import COLOR_LETRA_CORRECTO
+from constantes import COLOR_LETRA_CORRECTO
+
+
 def wrap_recuadro(
     elementos: list[dict],
     padding: tuple[int, int] = (40, 20),

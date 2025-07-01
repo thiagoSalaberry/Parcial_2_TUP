@@ -2,7 +2,8 @@ import pygame
 from pygame import Surface
 from pygame.font import Font
 from pygame.event import Event
-from consola.constantes import COLOR_TEXTO
+from constantes import COLOR_TEXTO
+
 
 def texto(area: Surface, texto_el: dict, font: Font = None) -> None:
     if font is None:

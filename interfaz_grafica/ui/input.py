@@ -1,7 +1,9 @@
 import pygame
 from pygame.font import Font
 from pygame.event import Event
-from consola.constantes import COLOR_LETRA_ACTIVO, COLOR_LETRA_ACTIVO_SOMBRA
+from constantes import COLOR_LETRA_ACTIVO, COLOR_LETRA_ACTIVO_SOMBRA
+
+
 def crear_input(texto: str, font: Font) -> dict:
     if font is None:
         font = pygame.font.SysFont(None, 24)
@@ -51,3 +53,9 @@ def wrap_input(texto_dict: dict, font: Font) -> dict:
         "ancho": data["ancho"],
         "alto": data["alto"]
     }
+
+def manejar_click_input(input: dict, eventos: list[pygame.event.Event]) -> None:
+    for evento in eventos:
+        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+            if input["rect"].collidepoint(evento.pos):
+                input["callback"]()
